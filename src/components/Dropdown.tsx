@@ -3,33 +3,49 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import { twMerge } from 'tailwind-merge'
 
 type DropdownProps = {
+  /** Dropdown content (Trigger + Content). */
   children: React.ReactNode
+  /** Controlled open state. */
   open?: boolean
+  /** Callback fired when open state changes. */
   onOpenChange?: (open: boolean) => void
+  /** Whether the dropdown should be modal (trap focus). @default false */
   modal?: boolean
 }
 
 type DropdownTriggerProps = {
+  /** Element that opens the dropdown. */
   children: React.ReactNode
+  /** Additional CSS classes. */
   className?: string
+  /** Merge props onto the child element instead of wrapping. */
   asChild?: boolean
 }
 
 type DropdownContentProps = {
+  /** Menu items. */
   children: React.ReactNode
+  /** Additional CSS classes. */
   className?: string
+  /** Horizontal alignment relative to the trigger. @default 'end' */
   align?: 'start' | 'center' | 'end'
+  /** Distance from the trigger in pixels. @default 4 */
   sideOffset?: number
 }
 
 type DropdownItemProps = {
+  /** Item content. */
   children: React.ReactNode
+  /** Additional CSS classes. */
   className?: string
+  /** Callback when the item is selected. */
   onSelect?: () => void
+  /** Merge props onto the child element instead of wrapping. */
   asChild?: boolean
 }
 
 type DropdownSeparatorProps = {
+  /** Additional CSS classes. */
   className?: string
 }
 

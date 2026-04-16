@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { sentryTanstackStart } from '@sentry/tanstackstart-react/vite'
 import { defineConfig } from 'vite'
 import contentCollections from '@content-collections/vite'
@@ -9,12 +10,22 @@ import viteReact from '@vitejs/plugin-react'
 import rsc from '@vitejs/plugin-rsc'
 import netlify from '@netlify/vite-plugin-tanstack-start'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { storybookTest } from '@storybook/addon-vitest/vitest-plugin'
+import { playwright } from '@vitest/browser-playwright'
+import componentHighlighter from 'vite-plugin-experimental-storybook-devtools/react'
 
+import { DevTools  } from '@vitejs/devtools'
+const dirname =
+  typeof __dirname !== 'undefined'
+    ? __dirname
+    : path.dirname(fileURLToPath(import.meta.url))
+
+// More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 const isDev = process.env.NODE_ENV !== 'production'
 const shouldUseSentryPlugin =
   process.env.NODE_ENV === 'production' &&
   Boolean(process.env.SENTRY_AUTH_TOKEN)
-
 const rscSsrExternals = [
   // OpenTelemetry uses require-in-the-middle which is CJS-only and breaks
   // under Vite's ESM module runner during dev SSR.
@@ -32,11 +43,13 @@ const rscSsrExternals = [
   // These packages also have known CJS/ESM interop issues in the RSC/SSR path.
   'discord-interactions',
 ]
-
 const sentrySsrExternals = ['@sentry/node', '@sentry/tanstackstart-react']
 const dbSsrExternals = ['drizzle-orm', 'drizzle-orm/postgres-js']
-
 export default defineConfig({
+  devtools: {
+    enabled: true,
+    clientAuth: false
+  },
   resolve: {
     alias: {
       '~': path.resolve(__dirname, './src'),
@@ -132,7 +145,6 @@ export default defineConfig({
           ) {
             return 'app-shell'
           }
-
           if (
             id.includes('/node_modules/@tanstack/react-router') ||
             id.includes('/node_modules/@tanstack/router-core') ||
@@ -140,7 +152,6 @@ export default defineConfig({
           ) {
             return 'tanstack-router'
           }
-
           if (
             id.includes('/node_modules/@tanstack/react-query') ||
             id.includes('/node_modules/@tanstack/query-core')
@@ -154,7 +165,6 @@ export default defineConfig({
             if (id.includes('lucide-react')) {
               return 'icons'
             }
-
             if (
               id.includes('node_modules/react-dom/') ||
               id.includes('node_modules/react/') ||
@@ -167,10 +177,12 @@ export default defineConfig({
       },
     },
   },
-  plugins: [
-    ...(isDev ? [tanstackDevtools()] : []),
+  plugins: [DevTools(), 
     tanstackStart({
-      rsc: {
+      spa: {
+        enabled: true,
+      },
+       rsc: {
         enabled: true,
       },
       importProtection: {
@@ -205,7 +217,7 @@ export default defineConfig({
       ? [netlify()]
       : []),
     viteReact(),
-
+    componentHighlighter(),
     ...(shouldUseSentryPlugin
       ? [
           sentryTanstackStart({
@@ -227,4 +239,31 @@ export default defineConfig({
         ]
       : []),
   ],
+  test: {
+    projects: [
+      {
+        extends: true,
+        plugins: [
+          // The plugin will run tests for the stories defined in your Storybook config
+          // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
+          storybookTest({
+            configDir: path.join(dirname, '.storybook'),
+          }),
+        ],
+        test: {
+          name: 'storybook',
+          browser: {
+            enabled: true,
+            headless: true,
+            provider: playwright({}),
+            instances: [
+              {
+                browser: 'chromium',
+              },
+            ],
+          },
+        },
+      },
+    ],
+  },
 })

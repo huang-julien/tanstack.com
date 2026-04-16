@@ -9,16 +9,24 @@ import {
 } from './Dropdown'
 
 export type SelectOption = {
+  /** Display text. */
   label: string
+  /** Unique value identifier. */
   value: string
+  /** Optional logo image URL shown beside the label. */
   logo?: string
 }
 
 export type SelectProps<T extends SelectOption> = {
+  /** Additional CSS classes. */
   className?: string
+  /** Custom icon shown in the trigger. */
   icon?: ReactNode
+  /** Currently selected value. */
   selected: string
+  /** List of available options. */
   available: T[]
+  /** Callback fired when an option is selected. */
   onSelect: (selected: T) => void
 }
 

@@ -13,11 +13,17 @@ const sizeClasses: Record<AvatarSize, { container: string; text: string }> = {
 }
 
 interface AvatarProps {
+  /** Direct profile image URL. Takes priority over all other fallbacks. */
   image?: string | null
+  /** OAuth provider avatar URL. Used when `image` is not set. */
   oauthImage?: string | null
+  /** User's display name. Used to generate initials fallback. */
   name?: string | null
+  /** User's email. Used for initials when `name` is not available. */
   email?: string | null
+  /** Avatar diameter. @default 'md' */
   size?: AvatarSize
+  /** Additional CSS classes. */
   className?: string
 }
 

@@ -7,12 +7,17 @@ type CollapsibleRenderProps = {
 }
 
 type CollapsibleProps = {
+  /** Controlled open state. Overrides internal state when provided. */
   open?: boolean
+  /** Initial open state for uncontrolled mode. @default false */
   defaultOpen?: boolean
+  /** Callback fired when open state changes. */
   onOpenChange?: (open: boolean) => void
+  /** Content or render function receiving `{ open, toggle }`. */
   children:
     | React.ReactNode
     | ((props: CollapsibleRenderProps) => React.ReactNode)
+  /** Additional CSS classes. */
   className?: string
 }
 

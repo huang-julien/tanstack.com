@@ -2,8 +2,11 @@ import * as React from 'react'
 import { CheckCircleIcon } from '~/components/icons/CheckCircleIcon'
 
 type FeatureGridProps = {
+  /** Optional heading displayed above the grid. */
   title?: string
+  /** Array of feature items (text or JSX). Each is rendered with a check icon. */
   items: React.ReactNode[]
+  /** Override the default grid layout classes. */
   gridClassName?: string
 }
 

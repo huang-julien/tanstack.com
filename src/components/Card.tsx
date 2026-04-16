@@ -2,8 +2,11 @@ import * as React from 'react'
 import { twMerge } from 'tailwind-merge'
 
 type CardOwnProps<TElement extends React.ElementType = 'div'> = {
+  /** Render as a different element type (e.g. `Link`, `a`). Defaults to `div`. */
   as?: TElement
+  /** Card content. */
   children: React.ReactNode
+  /** Additional CSS classes. */
   className?: string
 }
 

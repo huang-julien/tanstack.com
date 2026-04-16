@@ -1,19 +1,32 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface PaginationControlsProps {
+  /** Current active page (1-indexed). */
   currentPage: number
+  /** Total number of pages. */
   totalPages: number
+  /** Total number of items across all pages. */
   totalItems: number
+  /** Number of items after filtering. Shown as "X of Y" when different from totalItems. */
   filteredItems?: number
+  /** Items per page. */
   pageSize: number
+  /** Available page size options. @default [10, 25, 50, 100] */
   pageSizeOptions?: number[]
+  /** Callback fired when the page changes. */
   onPageChange: (page: number) => void
+  /** Callback fired when page size changes. */
   onPageSizeChange: (pageSize: number) => void
+  /** Whether the previous page button is enabled. */
   canGoPrevious: boolean
+  /** Whether the next page button is enabled. */
   canGoNext: boolean
+  /** Show the page size selector dropdown. @default true */
   showPageSizeSelector?: boolean
-  itemLabel?: string // e.g., "users", "entries"
-  sticky?: boolean // If true, wraps in sticky container with consistent styling
+  /** Label for items (e.g. "users", "entries"). */
+  itemLabel?: string
+  /** Wrap in a sticky container with consistent styling. */
+  sticky?: boolean
 }
 
 export function PaginationControls({

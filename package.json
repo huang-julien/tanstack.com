@@ -26,9 +26,16 @@
     "test:lint": "pnpm run lint",
     "test:smoke": "tsx tests/smoke.ts",
     "test:e2e": "playwright test",
-    "prepare": "husky"
+    "prepare": "husky",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/generator": "^7.29.1",
+    "@babel/parser": "^7.29.2",
+    "@babel/traverse": "^7.29.0",
+    "@babel/types": "^7.29.0",
     "@floating-ui/react": "^0.27.19",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@netlify/functions": "^5.1.5",
@@ -64,6 +71,7 @@
     "@types/d3": "^7.4.3",
     "@uploadthing/react": "^7.3.3",
     "@visx/hierarchy": "^3.12.0",
+    "@vitejs/devtools": "^0.1.13",
     "@vitejs/plugin-react": "^6.0.1",
     "@vitejs/plugin-rsc": "^0.5.23",
     "@webcontainer/api": "^1.6.1",
@@ -88,6 +96,7 @@
     "react-colorful": "^5.6.1",
     "react-dom": "19.2.3",
     "react-easy-crop": "^5.5.7",
+    "react-element-to-jsx-string": "^17.0.1",
     "react-instantsearch": "^7.29.0",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-callouts": "^2.1.2",
@@ -115,10 +124,18 @@
     "zustand": "^5.0.12"
   },
   "devDependencies": {
+    "@chromatic-com/storybook": "^5.1.2",
     "@content-collections/core": "^0.14.3",
     "@content-collections/vite": "^0.2.9",
     "@playwright/test": "^1.59.0",
     "@shikijs/transformers": "^4.0.2",
+    "@storybook/addon-a11y": "^10.3.5",
+    "@storybook/addon-docs": "^10.3.5",
+    "@storybook/addon-mcp": "^0.5.0",
+    "@storybook/addon-onboarding": "^10.3.5",
+    "@storybook/addon-vitest": "^10.3.5",
+    "@storybook/react-vite": "^10.3.5",
+    "@storybook/tanstack-react": "0.0.0-pr-34403-sha-bf1e9a7f",
     "@tanstack/devtools-vite": "^0.6.0",
     "@tanstack/react-devtools": "^0.10.1",
     "@tanstack/react-query-devtools": "^5.96.2",
@@ -130,6 +147,8 @@
     "@types/remove-markdown": "^0.3.4",
     "@types/tar-stream": "^3.1.4",
     "@types/three": "^0.183.1",
+    "@vitest/browser-playwright": "^4.1.4",
+    "@vitest/coverage-v8": "^4.1.4",
     "dotenv-cli": "^11.0.0",
     "drizzle-kit": "^0.31.10",
     "esbuild": "^0.27.4",
@@ -138,11 +157,16 @@
     "oxfmt": "^0.43.0",
     "oxlint": "^1.58.0",
     "oxlint-tsgolint": "^0.19.0",
+    "playwright": "^1.59.1",
     "source-map-explorer": "^2.5.3",
+    "storybook": "^10.3.5",
     "tailwindcss": "^4.2.2",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2",
-    "vite": "^8.0.3"
+    "unenv": "^1.10.0",
+    "vite": "^8.0.3",
+    "vite-plugin-experimental-storybook-devtools": "https://pkg.pr.new/storybookjs/vite-plugin-experimental-storybook-devtools@ce5c26b",
+    "vitest": "^4.1.4"
   },
   "engines": {
     "node": ">=22.0.0"
@@ -156,9 +180,14 @@
       "qs": ">=6.14.1",
       "tunnel-rat>zustand": "5.0.12",
       "js-yaml": "^3.14.2",
+      "vite": "^8.0.3",
+      "unenv": "^1.10.0",
       "minimatch@3.1.5>brace-expansion": "1.1.12",
       "minimatch@5.1.9>brace-expansion": "2.0.3",
       "minimatch@10.2.5>brace-expansion": "5.0.5"
+    },
+    "patchedDependencies": {
+      "@storybook/tanstack-react": "patches/@storybook__tanstack-react.patch"
     }
   }
 }

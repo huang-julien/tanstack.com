@@ -18,8 +18,11 @@ const brandLogos: Record<string, string> = {
 }
 
 type TrustedByMarqueeProps = {
+  /** Brand names to display. Must match keys in the internal `brandLogos` map. */
   brands: string[]
-  speed?: number // pixels per second
+  /** Scroll speed in pixels per second. @default 150 */
+  speed?: number
+  /** Additional CSS classes. */
   className?: string
 }
 

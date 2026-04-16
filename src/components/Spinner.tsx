@@ -2,6 +2,7 @@ import { twMerge } from 'tailwind-merge'
 import { Loader2 } from 'lucide-react'
 
 interface SpinnerProps {
+  /** Additional CSS classes to control size and color (e.g. `text-blue-500 text-4xl`). */
   className?: string
 }
 

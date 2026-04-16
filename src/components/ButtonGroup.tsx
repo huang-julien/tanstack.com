@@ -2,7 +2,9 @@ import * as React from 'react'
 import { twMerge } from 'tailwind-merge'
 
 type ButtonGroupProps = {
+  /** Button elements to group together. */
   children: React.ReactNode
+  /** Additional CSS classes. */
   className?: string
 }
 

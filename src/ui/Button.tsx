@@ -19,12 +19,19 @@ type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'icon-sm' | 'icon-md'
 type ButtonRounded = 'none' | 'md' | 'lg' | 'full'
 
 type ButtonOwnProps<TElement extends React.ElementType = 'button'> = {
+  /** Render as a different element type (e.g. `Link`, `a`). Defaults to `button`. */
   as?: TElement
+  /** Button content. */
   children: React.ReactNode
+  /** Visual style variant. @default 'primary' */
   variant?: ButtonVariant
+  /** Color theme. Only applies to `primary` and `icon` variants. @default 'blue' */
   color?: ButtonColor
+  /** Size preset. @default 'sm' */
   size?: ButtonSize
+  /** Border radius. @default 'lg' */
   rounded?: ButtonRounded
+  /** Additional CSS classes. */
   className?: string
 }
 

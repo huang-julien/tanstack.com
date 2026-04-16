@@ -1,0 +1,146 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as AvatarStories from '../components/Avatar.stories'
+import * as CardStories from '../components/Card.stories'
+import * as CollapsibleStories from '../components/Collapsible.stories'
+import * as DropdownStories from '../components/Dropdown.stories'
+import * as SelectStories from '../components/Select.stories'
+import * as TooltipStories from '../components/Tooltip.stories'
+import * as SpinnerStories from '../components/Spinner.stories'
+import * as ButtonGroupStories from '../components/ButtonGroup.stories'
+import * as BreadcrumbsStories from '../components/Breadcrumbs.stories'
+import * as PaginationStories from '../components/PaginationControls.stories'
+
+<Meta title="Introduction/Components Guide" />
+
+# Components Guide
+
+Higher-level components built on top of UI primitives. These implement specific patterns and interactions used throughout tanstack.com.
+
+---
+
+## Avatar
+
+Displays a user avatar with automatic fallback chain: profile image → OAuth image → initials → generic icon.
+
+<Canvas of={AvatarStories.WithImage} />
+
+### Fallback priority
+
+1. `image` — Direct profile image URL
+2. `oauthImage` — OAuth provider avatar
+3. `name` / `email` — Generates initials (e.g. "TL" for "Tanner Linsley")
+4. Generic user icon
+
+### Sizes
+
+Six sizes from `2xs` (16px) to `xl` (80px):
+
+<Canvas of={AvatarStories.Sizes} />
+
+---
+
+## Card
+
+A polymorphic container with shadow, border, and rounded corners. Renders as `<div>` by default but supports `as` prop for Link, button, etc.
+
+<Canvas of={CardStories.Default} />
+
+### As a Link
+
+Use `as={Link}` with TanStack Router `Link` props to make the entire card clickable:
+
+<Canvas of={CardStories.AsLink} />
+
+---
+
+## Collapsible
+
+An expandable section supporting both controlled and uncontrolled modes. Includes `CollapsibleTrigger` and `CollapsibleContent` sub-components.
+
+<Canvas of={CollapsibleStories.Default} />
+
+### Modes
+
+| Mode | Usage |
+|------|--------|
+| **Uncontrolled** | Pass `defaultOpen` for initial state, component manages itself |
+| **Controlled** | Pass `open` and `onOpenChange` for external state control |
+| **Render props** | Pass a function as children to access `{ open, toggle }` |
+
+<Canvas of={CollapsibleStories.Multiple} />
+
+---
+
+## Dropdown
+
+A Radix UI–based dropdown menu with trigger, content, items, and separator sub-components.
+
+<Canvas of={DropdownStories.Default} />
+
+### Alignment
+
+Use `align` prop on `DropdownContent` to control menu alignment: `start`, `center`, or `end`.
+
+<Canvas of={DropdownStories.WithIcons} />
+
+---
+
+## Select
+
+A custom select dropdown built on `Dropdown`. Supports optional logo images next to each option.
+
+<Canvas of={SelectStories.Default} />
+
+<Canvas of={SelectStories.WithoutLogos} />
+
+---
+
+## Tooltip
+
+A Floating UI–based tooltip that appears on hover. Supports four placement directions and rich content.
+
+<Canvas of={TooltipStories.Default} />
+
+### Placements
+
+<Canvas of={TooltipStories.Placements} />
+
+---
+
+## Spinner
+
+An animated loading indicator using lucide's `Loader2` icon. Size and color are customizable via className.
+
+<Canvas of={SpinnerStories.Default} />
+
+---
+
+## ButtonGroup
+
+Groups multiple buttons into a single visual unit with shared borders and dividers.
+
+<Canvas of={ButtonGroupStories.Default} />
+
+---
+
+## Breadcrumbs
+
+Section breadcrumbs with an optional "On this page" table-of-contents dropdown, visible below the configured breakpoint.
+
+<Canvas of={BreadcrumbsStories.Default} />
+
+---
+
+## PaginationControls
+
+Full pagination bar with page navigation, page size selector, and item count display.
+
+<Canvas of={PaginationStories.Default} />
+
+### Features
+
+- Previous/Next buttons with disabled states
+- Page size selector with configurable options (default: 10, 25, 50, 100)
+- Item count display with optional filtered count
+- Sticky mode for fixed positioning
+- Custom item label (e.g. "users", "entries")

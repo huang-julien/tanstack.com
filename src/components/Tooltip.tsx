@@ -11,9 +11,13 @@ import {
 } from '@floating-ui/react'
 
 interface TooltipProps {
+  /** Tooltip content. Can be a string or rich JSX. */
   content: React.ReactNode
+  /** Trigger element. Must accept a ref. */
   children: React.ReactElement
+  /** Tooltip position relative to the trigger. @default 'top' */
   placement?: 'top' | 'right' | 'bottom' | 'left'
+  /** Additional CSS classes for the tooltip container. */
   className?: string
 }
 

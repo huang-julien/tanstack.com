@@ -16,3 +16,4 @@ TanStack.com marketing site built with TanStack Start.
 - [TanStack Patterns](.agents/tanstack-patterns.md): Loaders, server functions, environment shaking
 - [UI Style Guide](.agents/ui-style.md): Visual design principles for 2026
 - [Workflow](.agents/workflow.md): Build commands, debugging, Playwright
+- [storybook](.agents/storybook.md): UI component development with storybook instruction

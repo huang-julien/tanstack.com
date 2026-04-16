@@ -11,8 +11,11 @@ type BadgeVariant =
   | 'orange'
 
 type BadgeProps = {
+  /** Badge content. */
   children: React.ReactNode
+  /** Color variant. @default 'default' */
   variant?: BadgeVariant
+  /** Additional CSS classes. */
   className?: string
 }
 

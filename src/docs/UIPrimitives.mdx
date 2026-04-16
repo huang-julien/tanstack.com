@@ -1,0 +1,61 @@
+import { Meta, Story, Controls, Canvas } from '@storybook/addon-docs/blocks'
+import * as ButtonStories from '../ui/Button.stories'
+import * as BadgeStories from '../ui/Badge.stories'
+
+<Meta of={ButtonStories} />
+
+# UI Primitives
+
+The foundational building blocks of the TanStack component system. These primitives are designed to be composed into higher-level components.
+
+---
+
+## Button
+
+A polymorphic button component supporting multiple visual variants, color themes, sizes, and border radius options. Renders as `<button>` by default but can be any element via the `as` prop.
+
+<Canvas of={ButtonStories.Primary} />
+
+### Variants
+
+| Variant | Description |
+|---------|-------------|
+| `primary` | Solid background with border, the default CTA style |
+| `secondary` | Subtle gray background for secondary actions |
+| `ghost` | Transparent with border, for tertiary actions |
+| `icon` | Minimal padding for icon-only buttons |
+
+<Canvas of={ButtonStories.Colors} />
+
+### Colors
+
+9 color options: `blue` (default), `green`, `red`, `orange`, `purple`, `gray`, `emerald`, `cyan`, `yellow`.
+
+<Canvas of={ButtonStories.Sizes} />
+
+### Sizes
+
+4 sizes: `xs`, `sm`, `md` (default), `lg`. Plus `icon-sm` and `icon-md` for icon-only variants.
+
+<Controls of={ButtonStories.Primary} />
+
+---
+
+## Badge
+
+A small status pill for labels, tags, and indicators. Supports 8 color variants.
+
+<Canvas of={BadgeStories.AllVariants} />
+
+### Variants
+
+| Variant | Use Case |
+|---------|----------|
+| `default` | Neutral labels |
+| `success` | Positive status, completion |
+| `warning` | Caution, pending states |
+| `error` | Errors, destructive states |
+| `info` | Informational highlights |
+| `purple` | Custom category |
+| `teal` | Custom category |
+| `orange` | Custom category |
