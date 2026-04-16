@@ -7,8 +7,7 @@ const meta = {
   parameters: {
     docs: {
       description: {
-        component:
-          'Placeholder grid displayed while sponsor data loads.',
+        component: 'Placeholder grid displayed while sponsor data loads.',
       },
     },
   },

@@ -9,8 +9,7 @@ const meta = {
   parameters: {
     docs: {
       description: {
-        component:
-          'TanStack brand logos in monochrome and color variants.',
+        component: 'TanStack brand logos in monochrome and color variants.',
       },
     },
     tanstack: {

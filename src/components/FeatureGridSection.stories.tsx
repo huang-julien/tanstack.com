@@ -7,8 +7,7 @@ const meta = {
   parameters: {
     docs: {
       description: {
-        component:
-          'Feature section with title, description, and feature grid.',
+        component: 'Feature section with title, description, and feature grid.',
       },
     },
   },

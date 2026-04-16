@@ -15,7 +15,7 @@ import { storybookTest } from '@storybook/addon-vitest/vitest-plugin'
 import { playwright } from '@vitest/browser-playwright'
 import componentHighlighter from 'vite-plugin-experimental-storybook-devtools/react'
 
-import { DevTools  } from '@vitejs/devtools'
+import { DevTools } from '@vitejs/devtools'
 const dirname =
   typeof __dirname !== 'undefined'
     ? __dirname
@@ -48,7 +48,7 @@ const dbSsrExternals = ['drizzle-orm', 'drizzle-orm/postgres-js']
 export default defineConfig({
   devtools: {
     enabled: true,
-    clientAuth: false
+    clientAuth: false,
   },
   resolve: {
     alias: {
@@ -177,12 +177,13 @@ export default defineConfig({
       },
     },
   },
-  plugins: [DevTools(), 
+  plugins: [
+    DevTools(),
     tanstackStart({
       spa: {
         enabled: true,
       },
-       rsc: {
+      rsc: {
         enabled: true,
       },
       importProtection: {

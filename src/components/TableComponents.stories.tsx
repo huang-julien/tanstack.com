@@ -16,8 +16,7 @@ const meta = {
   parameters: {
     docs: {
       description: {
-        component:
-          'Styled table primitives: Table, Thead, Tbody, Tr, Th, Td.',
+        component: 'Styled table primitives: Table, Thead, Tbody, Tr, Th, Td.',
       },
     },
   },
@@ -28,7 +27,12 @@ type Story = StoryObj<typeof meta>
 
 const sampleData = [
   { name: 'TanStack Query', downloads: '8.2M', stars: '42k', status: 'Stable' },
-  { name: 'TanStack Router', downloads: '1.5M', stars: '8.5k', status: 'Stable' },
+  {
+    name: 'TanStack Router',
+    downloads: '1.5M',
+    stars: '8.5k',
+    status: 'Stable',
+  },
   { name: 'TanStack Table', downloads: '3.1M', stars: '25k', status: 'Stable' },
   { name: 'TanStack Form', downloads: '450k', stars: '4.2k', status: 'Stable' },
   { name: 'TanStack Start', downloads: '120k', stars: '3.8k', status: 'Beta' },
@@ -66,13 +70,27 @@ export const WithSortableHeaders: Story = {
     <Table>
       <TableHeader>
         <TableHeaderRow>
-          <SortableTableHeaderCell sortable sortDirection="asc" onSort={() => {}}>
+          <SortableTableHeaderCell
+            sortable
+            sortDirection="asc"
+            onSort={() => {}}
+          >
             Library
           </SortableTableHeaderCell>
-          <SortableTableHeaderCell sortable sortDirection={false} align="right" onSort={() => {}}>
+          <SortableTableHeaderCell
+            sortable
+            sortDirection={false}
+            align="right"
+            onSort={() => {}}
+          >
             Downloads
           </SortableTableHeaderCell>
-          <SortableTableHeaderCell sortable sortDirection="desc" align="right" onSort={() => {}}>
+          <SortableTableHeaderCell
+            sortable
+            sortDirection="desc"
+            align="right"
+            onSort={() => {}}
+          >
             Stars
           </SortableTableHeaderCell>
           <TableHeaderCell>Status</TableHeaderCell>
@@ -121,14 +139,18 @@ export const Relaxed: Story = {
       <TableHeader>
         <TableHeaderRow>
           <TableHeaderCell compact={false}>Library</TableHeaderCell>
-          <TableHeaderCell compact={false} align="right">Downloads</TableHeaderCell>
+          <TableHeaderCell compact={false} align="right">
+            Downloads
+          </TableHeaderCell>
         </TableHeaderRow>
       </TableHeader>
       <TableBody>
         {sampleData.slice(0, 3).map((row) => (
           <TableRow key={row.name}>
             <TableCell compact={false}>{row.name}</TableCell>
-            <TableCell compact={false} align="right">{row.downloads}</TableCell>
+            <TableCell compact={false} align="right">
+              {row.downloads}
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>

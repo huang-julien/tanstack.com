@@ -7,8 +7,7 @@ const meta = {
   parameters: {
     docs: {
       description: {
-        component:
-          'Inline code styling for embedding code snippets in text.',
+        component: 'Inline code styling for embedding code snippets in text.',
       },
     },
   },

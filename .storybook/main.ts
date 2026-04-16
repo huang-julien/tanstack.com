@@ -1,20 +1,17 @@
-import {defineMain} from '@storybook/tanstack-react/node'
+import { defineMain } from '@storybook/tanstack-react/node'
 import type { Plugin, UserConfig } from 'vite'
 
 export default defineMain({
-  "stories": [
-    "../src/**/*.mdx",
-    "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"
+  stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+  addons: [
+    '@chromatic-com/storybook',
+    '@storybook/addon-vitest',
+    '@storybook/addon-a11y',
+    '@storybook/addon-docs',
+    '@storybook/addon-onboarding',
+    '@storybook/addon-mcp',
   ],
-  "addons": [
-    "@chromatic-com/storybook",
-    "@storybook/addon-vitest",
-    "@storybook/addon-a11y",
-    "@storybook/addon-docs",
-    "@storybook/addon-onboarding",
-    "@storybook/addon-mcp"
-  ],
-  "framework": "@storybook/tanstack-react",
+  framework: '@storybook/tanstack-react',
   async viteFinal(config: UserConfig) {
     // Exclude Node-only bare packages from Vite's dep optimizer (esbuild).
     // sb.mock() handles the source-level stub for ~/db/client in preview.ts,

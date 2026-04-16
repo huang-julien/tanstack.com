@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import * as Toast from '@radix-ui/react-toast' 
+import * as Toast from '@radix-ui/react-toast'
 
 type ToastOptions = {
   durationMs?: number
@@ -33,7 +33,7 @@ export function ToastProvider({
   children: React.ReactNode
 }): React.ReactElement {
   const [toasts, setToasts] = React.useState<ToastItem[]>([])
-import( '@vitejs/devtools/client/inject')
+  import('@vitejs/devtools/client/inject')
   const notify = React.useCallback(
     (content: React.ReactNode, options?: ToastOptions) => {
       const id = Math.random().toString(36).slice(2)

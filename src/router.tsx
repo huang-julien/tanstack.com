@@ -60,7 +60,7 @@ export function getRouter() {
       queryClient,
     },
     scrollToTopSelectors: ['.scroll-to-top'],
-   })
+  })
 
   if (!router.isServer) {
     Sentry.addIntegration(

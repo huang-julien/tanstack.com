@@ -99,7 +99,7 @@ export const Route = createFileRoute('/')({
   component: Index,
 })
 
-  function Index() {
+function Index() {
   const locationHash = useRouterState({
     select: (state) => state.location.hash,
   })

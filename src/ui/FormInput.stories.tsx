@@ -10,8 +10,7 @@ const meta = {
   parameters: {
     docs: {
       description: {
-        component:
-          'Styled text input with configurable focus ring color.',
+        component: 'Styled text input with configurable focus ring color.',
       },
     },
   },
