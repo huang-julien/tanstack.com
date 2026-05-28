@@ -1,16 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect } from 'storybook/test'
 import { DocsCalloutQueryGG } from './DocsCalloutQueryGG'
+import preview from '../../.storybook/preview'
 
-const meta = {
+const meta = preview.meta({
   component: DocsCalloutQueryGG,
   tags: ['ai-generated'],
-} satisfies Meta<typeof DocsCalloutQueryGG>
+})
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {
+export const Default = meta.story({
   play: async ({ canvas }) => {
     // The PPP fetch runs against a real edge worker. In the story sandbox it
     // either fails (caught) or succeeds — either way the callout shell must
@@ -29,4 +30,4 @@ export const Default: Story = {
     await expect(cta).toBeVisible()
     await expect(cta.textContent).toMatch(/learn more|get \d+% off/i)
   },
-}
+})

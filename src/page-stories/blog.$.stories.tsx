@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import type { QueryClient } from '@tanstack/react-query'
 import { expect, waitFor } from 'storybook/test'
 import { Route } from '../routes/blog.$'
+import preview from '../../.storybook/preview'
 
 const seedRecentPosts = (qc: QueryClient) => {
   // The blog page right rail mounts `RecentPostsWidget`, which runs its own
@@ -28,7 +29,7 @@ const seedRecentPosts = (qc: QueryClient) => {
 // Page story for `/blog/$`. The real loader fetches a markdown post and
 // renders it to RSC server-side; here we replace the loader with one that
 // returns plain JSX as `contentRsc` so the page renders deterministically.
-const meta = {
+const meta = preview.meta({
   parameters: {
     queryClient: { seed: seedRecentPosts },
     tanstack: {
@@ -134,12 +135,12 @@ const meta = {
     },
   },
   tags: ['ai-generated'],
-} satisfies Meta<typeof Route>
+})
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {
+export const Default = meta.story({
   play: async ({ canvas }) => {
     // Title comes from the mocked loader's `title` field.
     await waitFor(async () => {
@@ -171,11 +172,11 @@ export const Default: Story = {
       'https://github.com/tanstack/tanstack.com/edit/main/src/blog/why-tanstack.md',
     )
   },
-}
+})
 
 // Single-heading post: the TOC is hidden when `headings.length <= 1`, so the
 // layout collapses to the narrower max-width branch.
-export const NoToc: Story = {
+export const NoToc = meta.story({
   parameters: {
     tanstack: {
       router: {
@@ -215,7 +216,7 @@ export const NoToc: Story = {
         },
       },
     },
-  } as Story['parameters'],
+  },
   play: async ({ canvas }) => {
     await waitFor(async () => {
       await expect(
@@ -223,4 +224,4 @@ export const NoToc: Story = {
       ).toBeVisible()
     })
   },
-}
+})

@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect, waitFor } from 'storybook/test'
 import { Route } from '../routes/paid-support'
+import preview from '../../.storybook/preview'
 
 // Static marketing route — no loader to mock. The interactive bit is the
 // view-mode toggle (compact / full / row) for maintainer cards.
-const meta = {
+const meta = preview.meta({
   parameters: {
     tanstack: {
       router: {
@@ -14,12 +15,12 @@ const meta = {
     },
   },
   tags: ['ai-generated'],
-} satisfies Meta<typeof Route>
+})
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {
+export const Default = meta.story({
   play: async ({ canvas }) => {
     await waitFor(async () => {
       await expect(
@@ -38,20 +39,20 @@ export const Default: Story = {
       expect.stringContaining('mailto:support@tanstack.com'),
     )
   },
-}
+})
 
-export const SwitchToFullView: Story = {
+export const SwitchToFullView = meta.story({
   play: async ({ canvas, userEvent }) => {
     const full = await waitFor(() => canvas.getByTitle('Full cards'))
     await userEvent.click(full)
     await expect(full.className).toMatch(/bg-blue-500/)
   },
-}
+})
 
-export const SwitchToRowView: Story = {
+export const SwitchToRowView = meta.story({
   play: async ({ canvas, userEvent }) => {
     const row = await waitFor(() => canvas.getByTitle('Row cards'))
     await userEvent.click(row)
     await expect(row.className).toMatch(/bg-blue-500/)
   },
-}
+})

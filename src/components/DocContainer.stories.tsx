@@ -1,16 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect } from 'storybook/test'
 import { DocContainer } from './DocContainer'
+import preview from '../../.storybook/preview'
 
-const meta = {
+const meta = preview.meta({
   component: DocContainer,
   tags: ['ai-generated'],
-} satisfies Meta<typeof DocContainer>
+})
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {
+export const Default = meta.story({
   args: {
     children: (
       <article className="prose dark:prose-invert">
@@ -27,9 +28,9 @@ export const Default: Story = {
     await expect(heading).toBeVisible()
     await expect(heading.tagName.toLowerCase()).toBe('h2')
   },
-}
+})
 
-export const WithExtraClassName: Story = {
+export const WithExtraClassName = meta.story({
   args: {
     className: 'border border-dashed border-gray-300 p-4',
     children: <p data-testid="body">Custom-styled doc container.</p>,
@@ -42,4 +43,4 @@ export const WithExtraClassName: Story = {
     await expect(wrapper.className).toMatch(/w-full/)
     await expect(wrapper.className).toMatch(/border-dashed/)
   },
-}
+})

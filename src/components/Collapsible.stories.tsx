@@ -5,16 +5,16 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from './Collapsible'
+import preview from '../../.storybook/preview'
 
-const meta = {
+const meta = preview.meta({
   component: Collapsible,
   tags: ['ai-generated'],
-} satisfies Meta<typeof Collapsible>
+})
 
 export default meta
-type Story = StoryObj<typeof meta>
 
-export const ClosedByDefault: Story = {
+export const ClosedByDefault = meta.story({
   args: {
     className: 'max-w-sm',
     children: (
@@ -37,9 +37,9 @@ export const ClosedByDefault: Story = {
     const content = canvas.getByTestId('changelog')
     await expect(content).toBeInTheDocument()
   },
-}
+})
 
-export const OpensOnClick: Story = {
+export const OpensOnClick = meta.story({
   args: {
     className: 'max-w-sm',
     children: (
@@ -66,9 +66,9 @@ export const OpensOnClick: Story = {
       /grid-rows-\[1fr\]/,
     )
   },
-}
+})
 
-export const DefaultOpen: Story = {
+export const DefaultOpen = meta.story({
   args: {
     defaultOpen: true,
     className: 'max-w-sm',
@@ -91,4 +91,4 @@ export const DefaultOpen: Story = {
     const grid = text.closest('[data-collapsible]')?.querySelector('.grid')
     await expect(grid?.className).toMatch(/grid-rows-\[1fr\]/)
   },
-}
+})

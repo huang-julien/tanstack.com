@@ -1,16 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect } from 'storybook/test'
 import { DocTitle } from './DocTitle'
+import preview from '../../.storybook/preview'
 
-const meta = {
+const meta = preview.meta({
   component: DocTitle,
   tags: ['ai-generated'],
-} satisfies Meta<typeof DocTitle>
+})
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Plain: Story = {
+export const Plain = meta.story({
   args: {
     children: 'Getting Started',
   },
@@ -21,9 +22,9 @@ export const Plain: Story = {
     // Confirms the Tailwind utility classes survived the build pipeline.
     await expect(heading.className).toMatch(/font-black/)
   },
-}
+})
 
-export const WithBadge: Story = {
+export const WithBadge = meta.story({
   args: {
     children: (
       <>
@@ -40,4 +41,4 @@ export const WithBadge: Story = {
     ).toBeVisible()
     await expect(canvas.getByText('new')).toBeVisible()
   },
-}
+})

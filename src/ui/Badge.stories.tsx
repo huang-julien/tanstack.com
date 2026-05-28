@@ -1,23 +1,24 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect } from 'storybook/test'
 import { Badge } from './Badge'
+import preview from '../../.storybook/preview'
 
-const meta = {
+const meta = preview.meta({
   component: Badge,
   tags: ['ai-generated'],
-} satisfies Meta<typeof Badge>
+})
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {
+export const Default = meta.story({
   args: { children: 'Stable' },
   play: async ({ canvas }) => {
     await expect(canvas.getByText('Stable')).toBeVisible()
   },
-}
+})
 
-export const Success: Story = {
+export const Success = meta.story({
   args: { variant: 'success', children: 'Passing' },
   play: async ({ canvas }) => {
     const badge = canvas.getByText('Passing')
@@ -26,13 +27,13 @@ export const Success: Story = {
     // CSS sanity check lives in Button.stories.tsx (CssCheck story).
     await expect(badge.className).toMatch(/bg-green-100/)
   },
-}
+})
 
-export const Error: Story = {
+export const Error = meta.story({
   args: { variant: 'error', children: 'Failed' },
   play: async ({ canvas }) => {
     const badge = canvas.getByText('Failed')
     await expect(badge).toBeVisible()
     await expect(badge.className).toMatch(/bg-red-100/)
   },
-}
+})

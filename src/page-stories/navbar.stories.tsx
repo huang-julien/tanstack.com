@@ -1,12 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect, waitFor } from 'storybook/test'
 import { Route } from '../routes/ethos'
+import preview from '../../.storybook/preview'
 
 // Navbar lives in __root so any page story renders it. We pin the page to a
 // simple, loader-less route (`/ethos`) so this story stays focused on the
 // navbar's own behavior — branding, search, theme toggle, mobile menu — and
 // not on whatever the underlying page is doing.
-const meta = {
+const meta = preview.meta({
   parameters: {
     tanstack: {
       router: {
@@ -16,12 +17,12 @@ const meta = {
     },
   },
   tags: ['ai-generated'],
-} satisfies Meta<typeof Route>
+})
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {
+export const Default = meta.story({
   play: async ({ canvas }) => {
     // Brand link is the always-visible anchor on the left.
     await waitFor(async () => {
@@ -38,9 +39,9 @@ export const Default: Story = {
     // Theme toggle and login fallback both render in the right cluster.
     await expect(canvas.getByRole('link', { name: /log in/i })).toBeVisible()
   },
-}
+})
 
-export const ToggleMobileMenu: Story = {
+export const ToggleMobileMenu = meta.story({
   play: async ({ canvas, userEvent }) => {
     const menuButton = await waitFor(() =>
       canvas.getByRole('button', { name: /open menu/i }),
@@ -57,9 +58,9 @@ export const ToggleMobileMenu: Story = {
     // Clicking the menu button again toggles it closed.
     await userEvent.click(menuButton)
   },
-}
+})
 
-export const SocialLinks: Story = {
+export const SocialLinks = meta.story({
   play: async ({ canvas }) => {
     await waitFor(async () => {
       await expect(
@@ -73,4 +74,4 @@ export const SocialLinks: Story = {
       canvas.getByRole('link', { name: /join tanstack discord/i }),
     ).toHaveAttribute('href', 'https://tlinz.com/discord')
   },
-}
+})

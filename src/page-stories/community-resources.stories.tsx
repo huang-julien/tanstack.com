@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect, waitFor } from 'storybook/test'
 import { Route } from '../routes/$libraryId/$version.docs.community-resources'
+import preview from '../../.storybook/preview'
 
 // Page-level story for the community-resources route. The real route loader
 // hits a remote markdown source via `loadDocs`; here we mock it so the story
 // renders with deterministic frontmatter sections.
-const meta = {
+const meta = preview.meta({
   parameters: {
     tanstack: {
       router: {
@@ -46,12 +47,12 @@ const meta = {
     },
   },
   tags: ['ai-generated'],
-} satisfies Meta<typeof Route>
+})
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {
+export const Default = meta.story({
   play: async ({ canvas }) => {
     // Title and intro
     await waitFor(async () => {
@@ -78,12 +79,9 @@ export const Default: Story = {
       'https://example.com/articles/why-tanstack-query',
     )
   },
-}
+})
 
-// Per-story TanStack router parameters need a cast because
-// @storybook/tanstack-react 10.4.0-alpha drops the route binding from
-// `StoryObj` when meta omits `component`. The runtime is unaffected.
-export const EmptyFrontmatter: Story = {
+export const EmptyFrontmatter = meta.story({
   parameters: {
     tanstack: {
       router: {
@@ -97,7 +95,7 @@ export const EmptyFrontmatter: Story = {
         },
       },
     },
-  } as Story['parameters'],
+  },
   play: async ({ canvas }) => {
     // Even with no doc, the title + intro still render — the body sections
     // are conditional on frontmatter shape.
@@ -111,4 +109,4 @@ export const EmptyFrontmatter: Story = {
       canvas.queryByRole('heading', { name: /^article$/i }),
     ).toBeNull()
   },
-}
+})

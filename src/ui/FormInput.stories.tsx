@@ -1,16 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect } from 'storybook/test'
 import { FormInput } from './FormInput'
+import preview from '../../.storybook/preview'
 
-const meta = {
+const meta = preview.meta({
   component: FormInput,
   tags: ['ai-generated'],
-} satisfies Meta<typeof FormInput>
+})
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {
+export const Default = meta.story({
   args: {
     placeholder: 'you@example.com',
     type: 'email',
@@ -21,9 +22,9 @@ export const Default: Story = {
     await expect(input).toBeVisible()
     await expect(input).toHaveAttribute('type', 'email')
   },
-}
+})
 
-export const TypingFlow: Story = {
+export const TypingFlow = meta.story({
   args: {
     placeholder: 'Search…',
     'aria-label': 'Search',
@@ -33,9 +34,9 @@ export const TypingFlow: Story = {
     await userEvent.type(input, 'tanstack')
     await expect(input.value).toBe('tanstack')
   },
-}
+})
 
-export const PurpleFocusRing: Story = {
+export const PurpleFocusRing = meta.story({
   args: {
     focusRing: 'purple',
     placeholder: 'API key',
@@ -45,4 +46,4 @@ export const PurpleFocusRing: Story = {
     const input = canvas.getByLabelText('API key')
     await expect(input.className).toMatch(/focus:ring-purple-500/)
   },
-}
+})

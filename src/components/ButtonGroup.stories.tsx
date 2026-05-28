@@ -1,16 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect } from 'storybook/test'
 import { ButtonGroup } from './ButtonGroup'
+import preview from '../../.storybook/preview'
 
-const meta = {
+const meta = preview.meta({
   component: ButtonGroup,
   tags: ['ai-generated'],
-} satisfies Meta<typeof ButtonGroup>
+})
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const ThreeOptions: Story = {
+export const ThreeOptions = meta.story({
   args: {
     children: (
       <>
@@ -31,9 +32,9 @@ export const ThreeOptions: Story = {
     await expect(canvas.getByRole('button', { name: /week/i })).toBeVisible()
     await expect(canvas.getByRole('button', { name: /month/i })).toBeVisible()
   },
-}
+})
 
-export const TwoOptions: Story = {
+export const TwoOptions = meta.story({
   args: {
     children: (
       <>
@@ -53,4 +54,4 @@ export const TwoOptions: Story = {
     await expect(light).toBeVisible()
     await expect(dark).toBeVisible()
   },
-}
+})

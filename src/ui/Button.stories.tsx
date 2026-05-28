@@ -1,16 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect } from 'storybook/test'
 import { Button } from './Button'
+import preview from '../../.storybook/preview'
 
-const meta = {
+const meta = preview.meta({
   component: Button,
   tags: ['ai-generated'],
-} satisfies Meta<typeof Button>
+})
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Primary: Story = {
+export const Primary = meta.story({
   args: {
     variant: 'primary',
     color: 'blue',
@@ -21,9 +22,9 @@ export const Primary: Story = {
     await expect(button).toBeVisible()
     await expect(button).toBeEnabled()
   },
-}
+})
 
-export const Disabled: Story = {
+export const Disabled = meta.story({
   args: {
     variant: 'primary',
     color: 'blue',
@@ -34,9 +35,9 @@ export const Disabled: Story = {
     const button = canvas.getByRole('button', { name: /save changes/i })
     await expect(button).toBeDisabled()
   },
-}
+})
 
-export const Secondary: Story = {
+export const Secondary = meta.story({
   args: {
     variant: 'secondary',
     size: 'sm',
@@ -46,9 +47,9 @@ export const Secondary: Story = {
     const button = canvas.getByRole('button', { name: /cancel/i })
     await expect(button).toBeVisible()
   },
-}
+})
 
-export const Ghost: Story = {
+export const Ghost = meta.story({
   args: {
     variant: 'ghost',
     children: 'Read more',
@@ -58,13 +59,13 @@ export const Ghost: Story = {
       canvas.getByRole('button', { name: /read more/i }),
     ).toBeVisible()
   },
-}
+})
 
 // CSS sanity check: Button "primary blue" must compile to Tailwind's
 // bg-blue-600 — `oklch(0.546 0.245 262.881)` in Tailwind v4. If Tailwind /
 // global CSS has not loaded, the computed background falls back to
 // `rgba(0, 0, 0, 0)` and this assertion fails loudly.
-export const CssCheck: Story = {
+export const CssCheck = meta.story({
   args: {
     variant: 'primary',
     color: 'blue',
@@ -76,4 +77,4 @@ export const CssCheck: Story = {
       'oklch(0.546 0.245 262.881)',
     )
   },
-}
+})

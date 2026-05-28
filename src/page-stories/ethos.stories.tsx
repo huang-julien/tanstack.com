@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect, waitFor } from 'storybook/test'
 import { Route } from '../routes/ethos'
+import preview from '../../.storybook/preview'
 
 // The /ethos route is a static marketing page (no loader), so the story just
 // needs the framework to mount it inside its synthetic memory router.
-const meta = {
+const meta = preview.meta({
   parameters: {
     tanstack: {
       router: {
@@ -14,12 +15,12 @@ const meta = {
     },
   },
   tags: ['ai-generated'],
-} satisfies Meta<typeof Route>
+})
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {
+export const Default = meta.story({
   play: async ({ canvas }) => {
     await waitFor(async () => {
       await expect(
@@ -41,4 +42,4 @@ export const Default: Story = {
     const tenetsLink = canvas.getByRole('link', { name: /product tenets/i })
     await expect(tenetsLink).toHaveAttribute('href', '/tenets')
   },
-}
+})

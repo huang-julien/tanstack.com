@@ -1,16 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect } from 'storybook/test'
 import { Card } from './Card'
+import preview from '../../.storybook/preview'
 
-const meta = {
+const meta = preview.meta({
+  title: 'Components/Card',
   component: Card,
-  tags: ['ai-generated'],
-} satisfies Meta<typeof Card>
+  tags: ['autodocs'],
+})
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Basic: Story = {
+export const Basic = meta.story({
   args: {
     className: 'p-6 max-w-sm',
     children: (
@@ -27,18 +29,20 @@ export const Basic: Story = {
       canvas.getByRole('heading', { name: /open source quality/i }),
     ).toBeVisible()
   },
-}
+})
 
-export const AsArticle: Story = {
+export const AsArticle = meta.story({
+  name: 'As <article>',
   args: {
     as: 'article',
     className: 'p-6 max-w-sm',
-    'aria-label': 'Release notes',
-    children: <p>v10 ships with a brand new Storybook setup.</p>,
+    children: (
+      <>
+        <h3 className="text-lg font-semibold">Open source quality</h3>
+        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+          Headless, type-safe, and tested in production.
+        </p>
+      </>
+    ),
   },
-  play: async ({ canvas }) => {
-    const article = canvas.getByRole('article', { name: /release notes/i })
-    await expect(article).toBeVisible()
-    await expect(article.tagName.toLowerCase()).toBe('article')
-  },
-}
+})

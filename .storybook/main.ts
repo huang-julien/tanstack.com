@@ -1,6 +1,5 @@
-import type { StorybookConfig } from '@storybook/tanstack-react'
-
-const config: StorybookConfig = {
+import { defineMain } from '@storybook/tanstack-react/node'
+export default defineMain({
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: [
     '@chromatic-com/storybook',
@@ -10,5 +9,4 @@ const config: StorybookConfig = {
     '@storybook/addon-mcp',
   ],
   framework: '@storybook/tanstack-react',
-}
-export default config
+})

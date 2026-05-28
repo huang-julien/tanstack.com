@@ -1,16 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect, waitFor } from 'storybook/test'
 import { Tooltip } from './Tooltip'
+import preview from '../../.storybook/preview'
 
-const meta = {
+const meta = preview.meta({
   component: Tooltip,
   tags: ['ai-generated'],
-} satisfies Meta<typeof Tooltip>
+})
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const HoverToReveal: Story = {
+export const HoverToReveal = meta.story({
   args: {
     content: 'Copy to clipboard',
     delayDuration: 0,
@@ -32,9 +33,9 @@ export const HoverToReveal: Story = {
       await expect(tooltip!.textContent).toMatch(/copy to clipboard/i)
     })
   },
-}
+})
 
-export const EmptyContentRendersChildOnly: Story = {
+export const EmptyContentRendersChildOnly = meta.story({
   args: {
     content: null,
     children: <span data-testid="bare">No tooltip wrapper</span>,
@@ -46,4 +47,4 @@ export const EmptyContentRendersChildOnly: Story = {
     await expect(child).toBeVisible()
     await expect(child.tagName.toLowerCase()).toBe('span')
   },
-}
+})

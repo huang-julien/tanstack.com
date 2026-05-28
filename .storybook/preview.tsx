@@ -1,5 +1,5 @@
 import * as React from 'react'
-import type { Preview } from '@storybook/tanstack-react'
+import { definePreview } from '@storybook/tanstack-react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from '../src/components/ThemeProvider'
 import { ToastProvider } from '../src/components/ToastProvider'
@@ -15,7 +15,7 @@ const makeQueryClient = () =>
     },
   })
 
-const preview: Preview = {
+export default definePreview({
   parameters: {
     controls: {
       matchers: {
@@ -65,6 +65,4 @@ const preview: Preview = {
       )
     },
   ],
-}
-
-export default preview
+})

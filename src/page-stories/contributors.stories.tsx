@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect, waitFor } from 'storybook/test'
 import { Route } from '../routes/$libraryId/$version.docs.contributors'
+import preview from '../../.storybook/preview'
 
 // Page-level story for the `/$libraryId/$version/docs/contributors` route.
 // `@storybook/tanstack-react` spins up a synthetic memory router around the
 // file route so `Route.useParams()` resolves with the params we supply below.
-const meta = {
+const meta = preview.meta({
   parameters: {
     tanstack: {
       router: {
@@ -16,12 +17,12 @@ const meta = {
     },
   },
   tags: ['ai-generated'],
-} satisfies Meta<typeof Route>
+})
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {
+export const Default = meta.story({
   play: async ({ canvas }) => {
     // The route renders asynchronously inside the framework's memory router,
     // so wait for the route component to settle before asserting.
@@ -34,9 +35,9 @@ export const Default: Story = {
       canvas.getByRole('heading', { name: /all-time contributors/i }),
     ).toBeVisible()
   },
-}
+})
 
-export const SwitchToCompactView: Story = {
+export const SwitchToCompactView = meta.story({
   play: async ({ canvas, userEvent }) => {
     // Three view-mode toggles render at the top; clicking "Compact cards"
     // exercises the local useState branch in the route component.
@@ -45,12 +46,12 @@ export const SwitchToCompactView: Story = {
     // Active button gets the bg-blue-500 / text-white treatment.
     await expect(compact.className).toMatch(/bg-blue-500/)
   },
-}
+})
 
-export const SwitchToRowView: Story = {
+export const SwitchToRowView = meta.story({
   play: async ({ canvas, userEvent }) => {
     const row = await waitFor(() => canvas.getByTitle('Row cards'))
     await userEvent.click(row)
     await expect(row.className).toMatch(/bg-blue-500/)
   },
-}
+})

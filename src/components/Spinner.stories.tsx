@@ -1,16 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect } from 'storybook/test'
 import { Spinner } from './Spinner'
+import preview from '../../.storybook/preview'
 
-const meta = {
+const meta = preview.meta({
   component: Spinner,
   tags: ['ai-generated'],
-} satisfies Meta<typeof Spinner>
+})
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {
+export const Default = meta.story({
   play: async ({ canvas }) => {
     const indicator = canvas.getByLabelText('Loading')
     await expect(indicator).toBeVisible()
@@ -18,12 +19,12 @@ export const Default: Story = {
     // class made it onto the rendered SVG.
     await expect(indicator.getAttribute('class')).toMatch(/animate-spin/)
   },
-}
+})
 
-export const Larger: Story = {
+export const Larger = meta.story({
   args: { className: 'text-6xl text-blue-500' },
   play: async ({ canvas }) => {
     const indicator = canvas.getByLabelText('Loading')
     await expect(indicator).toBeVisible()
   },
-}
+})

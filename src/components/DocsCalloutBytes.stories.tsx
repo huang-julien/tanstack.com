@@ -1,16 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect } from 'storybook/test'
 import { DocsCalloutBytes } from './DocsCalloutBytes'
+import preview from '../../.storybook/preview'
 
-const meta = {
+const meta = preview.meta({
   component: DocsCalloutBytes,
   tags: ['ai-generated'],
-} satisfies Meta<typeof DocsCalloutBytes>
+})
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {
+export const Default = meta.story({
   args: {
     className: 'max-w-xs',
   },
@@ -26,9 +27,9 @@ export const Default: Story = {
     await expect(email).toBeVisible()
     await expect(email.type).toBe('email')
   },
-}
+})
 
-export const TypingEmail: Story = {
+export const TypingEmail = meta.story({
   args: {
     className: 'max-w-xs',
   },
@@ -37,4 +38,4 @@ export const TypingEmail: Story = {
     await userEvent.type(email, 'reader@example.com')
     await expect(email.value).toBe('reader@example.com')
   },
-}
+})
