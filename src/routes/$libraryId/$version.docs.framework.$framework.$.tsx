@@ -6,12 +6,14 @@ import {
   createFileRoute,
 } from '@tanstack/react-router'
 import { seo } from '~/utils/seo'
+import { ogImageUrl } from '~/utils/og'
 import { Doc } from '~/components/Doc'
 import { loadDocsPage, resolveDocsRedirect } from '~/utils/docs'
 import { getBranch, getLibrary } from '~/libraries'
 import { capitalize } from '~/utils/utils'
 import { DocContainer } from '~/components/DocContainer'
 import type { ConfigSchema } from '~/utils/config'
+import { getDocsCacheHeaders } from '~/utils/docs-cache-headers'
 
 export const Route = createFileRoute(
   '/$libraryId/$version/docs/framework/$framework/$',
@@ -65,6 +67,11 @@ export const Route = createFileRoute(
     }
   },
   component: Docs,
+  headers: ({ params }) => {
+    const { libraryId, version } = params
+
+    return getDocsCacheHeaders({ libraryId, version })
+  },
   head: (ctx) => {
     const library = getLibrary(ctx.params.libraryId)
     const tail = `${library.name} ${capitalize(ctx.params.framework)} Docs`
@@ -75,6 +82,11 @@ export const Route = createFileRoute(
           ? `${ctx.loaderData.title} | ${tail}`
           : tail,
         description: ctx.loaderData?.description,
+        keywords: ctx.loaderData?.keywords,
+        image: ogImageUrl(library.id, {
+          title: ctx.loaderData?.title,
+          description: ctx.loaderData?.description,
+        }),
         noindex: library.visible === false,
       }),
     }

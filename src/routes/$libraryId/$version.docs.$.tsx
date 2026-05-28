@@ -1,10 +1,11 @@
 import { seo } from '~/utils/seo'
+import { ogImageUrl } from '~/utils/og'
 import { Doc } from '~/components/Doc'
 import { loadDocsPage, resolveDocsRedirect } from '~/utils/docs'
 import { findLibrary, getBranch, getLibrary } from '~/libraries'
 import { DocContainer } from '~/components/DocContainer'
 import type { ConfigSchema } from '~/utils/config'
-import { docsContentNegotiationVaryHeader } from '~/utils/http'
+import { getDocsCacheHeaders } from '~/utils/docs-cache-headers'
 import {
   notFound,
   redirect,
@@ -61,47 +62,40 @@ export const Route = createFileRoute('/$libraryId/$version/docs/$')({
     }
   },
   head: ({ loaderData, params }) => {
-    const { libraryId } = params
+    const { libraryId, version, _splat: docsPath } = params
     const library = findLibrary(libraryId)
 
     if (!library) {
       throw notFound()
     }
 
+    const frameworkVariantLinks = (loaderData?.frameworks ?? []).map(
+      (framework) => ({
+        rel: 'alternate',
+        type: 'text/markdown',
+        href: `/${libraryId}/${version}/docs/${docsPath}.md?framework=${framework}`,
+      }),
+    )
+
     return {
       meta: seo({
         title: `${loaderData?.title} | ${library.name} Docs`,
         description: loaderData?.description,
+        keywords: loaderData?.keywords,
+        image: ogImageUrl(library.id, {
+          title: loaderData?.title,
+          description: loaderData?.description,
+        }),
         noindex: library.visible === false,
       }),
+      links: frameworkVariantLinks,
     }
   },
   component: Docs,
   headers: ({ params }) => {
     const { version, libraryId } = params
-    const library = findLibrary(libraryId)
 
-    const isLatestVersion =
-      library &&
-      (version === 'latest' ||
-        version === library.latestVersion ||
-        version === library.latestBranch)
-
-    if (isLatestVersion) {
-      return {
-        'cache-control': 'public, max-age=60, must-revalidate',
-        'cdn-cache-control':
-          'max-age=600, stale-while-revalidate=3600, durable',
-        vary: docsContentNegotiationVaryHeader,
-      }
-    } else {
-      return {
-        'cache-control': 'public, max-age=3600, must-revalidate',
-        'cdn-cache-control':
-          'max-age=86400, stale-while-revalidate=604800, durable',
-        vary: docsContentNegotiationVaryHeader,
-      }
-    }
+    return getDocsCacheHeaders({ libraryId, version })
   },
 })
 

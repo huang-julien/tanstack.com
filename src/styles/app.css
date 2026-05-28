@@ -7,6 +7,15 @@
 @custom-variant auto (&:is(.auto, .auto *));
 @custom-variant aria-current (&[aria-current="location"]);
 
+html.theme-switching,
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition: none !important;
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+}
+
 @theme {
   /* Breakpoints */
   --breakpoint-xs: 480px;
@@ -15,6 +24,19 @@
   --font-sans:
     'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', Segoe UI Symbol, 'Noto Color Emoji';
+  --font-shop-display: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-shop-mono: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Shop type scale */
+  --text-shop-display: clamp(36px, 5vw, 52px);
+  --text-shop-heading: 22px;
+  --text-shop-title: 18px;
+  --text-shop-price: 20px;
+  --text-shop-body: 13.5px;
+  --text-shop-ui: 13px;
+  --text-shop-sm: 12px;
+  --text-shop-xs: 10.5px;
+  --text-shop-2xs: 9.5px;
 
   /* Shadows */
   --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
@@ -56,6 +78,25 @@
   --color-gray-800: #262626;
   --color-gray-900: #171717;
   --color-gray-950: #0a0a0a;
+}
+
+/* Shop color tokens — inline so they resolve via var() at runtime (scoped to .shop-scope / html.dark .shop-scope) */
+@theme inline {
+  --color-shop-bg: var(--shop-bg);
+  --color-shop-bg-2: var(--shop-bg-2);
+  --color-shop-panel: var(--shop-panel);
+  --color-shop-panel-2: var(--shop-panel-2);
+  --color-shop-surface: var(--shop-surface);
+  --color-shop-surface-hover: var(--shop-surface-hover);
+  --color-shop-line: var(--shop-line);
+  --color-shop-line-2: var(--shop-line-2);
+  --color-shop-text: var(--shop-text);
+  --color-shop-text-2: var(--shop-text-2);
+  --color-shop-muted: var(--shop-muted);
+  --color-shop-accent: var(--shop-accent);
+  --color-shop-accent-ink: var(--shop-accent-ink);
+  --color-shop-green: #22c993;
+  --color-shop-orange: #ff7a3a;
 }
 
 /* Safelist for dynamic colors */
@@ -193,6 +234,19 @@ button {
 
   .anchor-heading:hover > *:after {
     @apply opacity-50;
+  }
+
+  .anchor-heading-link {
+    text-decoration: none !important;
+    @apply ml-2 inline-block opacity-0 transition duration-100;
+  }
+
+  :hover > .anchor-heading-link {
+    @apply opacity-50;
+  }
+
+  .anchor-heading-link:focus {
+    @apply opacity-75;
   }
 
   :has(+ .anchor-heading) {
@@ -693,13 +747,6 @@ html.dark .shiki.aurora-x span[style*='color:#546E7A'] {
   @apply border-t-0 border-gray-500/10 shadow-md text-gray-800;
 }
 
-/* Hubspot */
-
-#hubspot-messages-iframe-container {
-  @apply translate-x-[10px] translate-y-[10px];
-  @apply dark:scheme-dark;
-}
-
 /* Markdown Alerts */
 
 .not-prose .markdown-alert {
@@ -1047,6 +1094,63 @@ mark {
   animation: dropdown-out 100ms ease-in;
 }
 
+/* Cart panel slide-in from right */
+@keyframes cart-panel-in {
+  from {
+    opacity: 0;
+    transform: translateX(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes cart-panel-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(1rem);
+  }
+}
+
+@keyframes cart-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cart-overlay-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.cart-panel[data-state='open'] {
+  animation: cart-panel-in 200ms ease-out;
+}
+
+.cart-panel[data-state='closed'] {
+  animation: cart-panel-out 150ms ease-in;
+}
+
+.cart-overlay[data-state='open'] {
+  animation: cart-overlay-in 200ms ease-out;
+}
+
+.cart-overlay[data-state='closed'] {
+  animation: cart-overlay-out 150ms ease-in;
+}
+
 /* Doc Feedback Styles */
 .doc-feedback-block {
   transition:
@@ -1075,7 +1179,6 @@ mark {
   height: 1em;
 }
 
-/* Consecutive code blocks - no gap when under headings */
 [data-tab] .codeblock + .codeblock {
   @apply mt-0 border-t-0 rounded-t-none;
 }
@@ -1083,58 +1186,40 @@ mark {
 [data-tab] .codeblock:has(+ .codeblock) {
   @apply rounded-b-none;
 }
-/* File tabs variant - minimal code blocks with floating copy button */
-.file-tabs-panel .codeblock {
-  @apply rounded-t-none border-t-0 my-0;
+
+[data-tab] {
+  @apply px-4 py-4;
 }
 
-/* Hide the title bar but keep copy button accessible */
-.file-tabs-panel .codeblock > div:first-child {
+[data-tab][data-content='code-only'] {
+  @apply p-0;
+}
+
+[data-tab][data-content='code-only'] .codeblock {
+  @apply rounded-none border-none my-0;
+}
+
+[data-tab][data-content='code-only'] .codeblock pre {
+  border-radius: 0;
+}
+
+[data-tab][data-content='code-only'] .codeblock > div:first-child {
   @apply absolute right-2 top-2 bg-transparent border-none p-0 z-10;
 }
 
-/* Hide the title text, keep only the button */
-.file-tabs-panel .codeblock > div:first-child > div:first-child {
-  @apply hidden;
-}
-
-/* Package manager tabs - minimal code blocks with floating copy button */
-.package-manager-tabs [data-tab] .codeblock {
-  @apply rounded-t-none border-t-0 my-0;
-}
-
-.package-manager-tabs [data-tab] .codeblock > div:first-child {
-  @apply absolute right-2 top-2 bg-transparent border-none p-0 z-10;
-}
-
-.package-manager-tabs .codeblock {
-  border: none;
-}
-
-.package-manager-tabs
-  [data-tab]
+[data-tab][data-content='code-only']
   .codeblock
   > div:first-child
   > div:first-child {
   @apply hidden;
 }
 
-/* Remove padding from tab content wrapper for package manager */
-.package-manager-tabs .not-prose > div:last-child {
-  @apply p-0 border-none rounded-b-none bg-transparent;
+[data-tab][data-content='mixed'] > p,
+[data-tab][data-content='mixed'] > ul,
+[data-tab][data-content='mixed'] > ol {
+  @apply text-sm leading-relaxed text-gray-700 dark:text-gray-300;
 }
 
-/* Restore bottom border radius on the code block itself */
-.package-manager-tabs [data-tab] .codeblock {
-  @apply rounded-b-md;
-}
-
-/* Framework code blocks - single blocks look like regular code blocks */
 .framework-code-block > .codeblock {
   @apply my-4;
-}
-
-/* Tab content - add padding when it's not just a code block */
-[data-tab]:not(:has(> .codeblock:only-child)) {
-  @apply px-4;
 }

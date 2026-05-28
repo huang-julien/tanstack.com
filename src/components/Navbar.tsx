@@ -8,6 +8,7 @@ const LazyNavbarAuthControls = React.lazy(() =>
     default: m.NavbarAuthControls,
   })),
 )
+import { NavbarCartButton } from './NavbarCartButton'
 import { Link, useLocation, useMatches } from '@tanstack/react-router'
 import { NetlifyImage } from './NetlifyImage'
 import {
@@ -29,14 +30,15 @@ import {
 } from 'lucide-react'
 import { ThemeToggle } from './ThemeToggle'
 import { SearchButton } from './SearchButton'
-import {
-  libraries,
-  findLibrary,
-  SIDEBAR_LIBRARY_IDS,
-  type LibrarySlim,
-} from '~/libraries'
+import { libraries, SIDEBAR_LIBRARY_IDS, type LibrarySlim } from '~/libraries'
 import { useClickOutside } from '~/hooks/useClickOutside'
 import { GithubIcon } from '~/components/icons/GithubIcon'
+import {
+  Dropdown,
+  DropdownContent,
+  DropdownItem,
+  DropdownTrigger,
+} from '~/components/Dropdown'
 import { DiscordIcon } from '~/components/icons/DiscordIcon'
 import { InstagramIcon } from '~/components/icons/InstagramIcon'
 import { BSkyIcon } from '~/components/icons/BSkyIcon'
@@ -138,14 +140,11 @@ const MobileCard = ({
 export function Navbar({ children }: { children: React.ReactNode }) {
   const matches = useMatches()
 
-  const { Title, library } = React.useMemo(() => {
+  const { Title } = React.useMemo(() => {
     const match = [...matches].reverse().find((m) => m.staticData.Title)
-    const params = match?.params as { libraryId?: string } | undefined
-    const libraryId = params?.libraryId
 
     return {
       Title: match?.staticData.Title ?? null,
-      library: libraryId ? findLibrary(libraryId) : null,
     }
   }, [matches])
 
@@ -223,40 +222,7 @@ export function Navbar({ children }: { children: React.ReactNode }) {
     </Link>
   )
 
-  const socialLinks = (
-    <div className="flex items-center [&_a]:p-1.5 [&_a]:opacity-50 [&_a:hover]:opacity-100 [&_a]:transition-opacity [&_svg]:text-sm">
-      <a
-        href={`https://github.com/${library?.repo ?? 'tanstack'}`}
-        aria-label={`Follow ${library?.name ?? 'TanStack'} on GitHub`}
-      >
-        <GithubIcon />
-      </a>
-      <a href="https://x.com/tan_stack" aria-label="Follow TanStack on X.com">
-        <BrandXIcon />
-      </a>
-      <a
-        href="https://bsky.app/profile/tanstack.com"
-        aria-label="Follow TanStack on Besky"
-      >
-        <BSkyIcon />
-      </a>
-      <a
-        href="https://instagram.com/tan_stack"
-        aria-label="Follow TanStack on Instagram"
-      >
-        <InstagramIcon />
-      </a>
-      <a
-        href="https://youtube.com/@tan_stack"
-        aria-label="Subscribe to TanStack on YouTube"
-      >
-        <YouTubeIcon />
-      </a>
-      <a href="https://tlinz.com/discord" aria-label="Join TanStack Discord">
-        <DiscordIcon />
-      </a>
-    </div>
-  )
+  const socialLinks = <SocialStack />
 
   const navbar = (
     <div
@@ -303,6 +269,7 @@ export function Navbar({ children }: { children: React.ReactNode }) {
           <SearchButton />
         </div>
         <ThemeToggle />
+        <NavbarCartButton />
         <div className="flex items-center gap-2">
           {canLoadAuthControls ? (
             <React.Suspense fallback={loginButtonFallback}>
@@ -619,7 +586,7 @@ export function Navbar({ children }: { children: React.ReactNode }) {
           {
             label: 'GitHub',
             icon: GithubIcon,
-            to: 'https://github.com/tanstack',
+            to: 'https://github.com/TanStack',
           },
           {
             label: 'Ethos',
@@ -781,5 +748,85 @@ export function Navbar({ children }: { children: React.ReactNode }) {
         </div>
       </div>
     </>
+  )
+}
+
+const SOCIAL_LINKS = [
+  {
+    label: 'GitHub',
+    href: 'https://github.com/TanStack',
+    Icon: GithubIcon,
+  },
+  {
+    label: 'Discord',
+    href: 'https://tlinz.com/discord',
+    Icon: DiscordIcon,
+  },
+  {
+    label: 'YouTube',
+    href: 'https://youtube.com/@tan_stack',
+    Icon: YouTubeIcon,
+  },
+  {
+    label: 'X (Twitter)',
+    href: 'https://x.com/tan_stack',
+    Icon: BrandXIcon,
+  },
+  {
+    label: 'Bluesky',
+    href: 'https://bsky.app/profile/tanstack.com',
+    Icon: BSkyIcon,
+  },
+  {
+    label: 'Instagram',
+    href: 'https://instagram.com/tan_stack',
+    Icon: InstagramIcon,
+  },
+] as const
+
+function SocialStack() {
+  const stackTop = SOCIAL_LINKS.slice(0, 3)
+
+  return (
+    <Dropdown>
+      <DropdownTrigger>
+        <button
+          type="button"
+          aria-label="TanStack social channels"
+          title="Social channels"
+          className="inline-flex h-9 items-center pl-1 pr-2"
+        >
+          <span className="relative inline-flex items-center">
+            {stackTop.map(({ label, Icon }, i) => (
+              <span
+                key={label}
+                className={twMerge(
+                  'inline-flex h-7 w-7 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-600 shadow-sm transition-transform dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300',
+                  i > 0 && '-ml-3',
+                )}
+                style={{ zIndex: stackTop.length - i }}
+              >
+                <Icon className="h-3 w-3" />
+              </span>
+            ))}
+          </span>
+        </button>
+      </DropdownTrigger>
+      <DropdownContent align="end" sideOffset={8} className="min-w-44">
+        {SOCIAL_LINKS.map(({ label, href, Icon }) => (
+          <DropdownItem key={href} asChild>
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`TanStack on ${label}`}
+            >
+              <Icon className="h-3.5 w-3.5" />
+              <span>{label}</span>
+            </a>
+          </DropdownItem>
+        ))}
+      </DropdownContent>
+    </Dropdown>
   )
 }

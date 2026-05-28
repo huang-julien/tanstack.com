@@ -12,6 +12,7 @@ import { RecentPostsWidget } from '~/components/RecentPostsWidget'
 
 import { Toc } from '~/components/Toc'
 import { Breadcrumbs } from '~/components/Breadcrumbs'
+import { CoverFallback } from '~/components/CoverFallback'
 import { fetchBlogPost } from '~/utils/blog.functions'
 
 export const Route = createFileRoute('/blog/$')({
@@ -61,7 +62,9 @@ export const Route = createFileRoute('/blog/$')({
 })
 
 function BlogPost() {
-  const { contentRsc, filePath, headings, title } = Route.useLoaderData()
+  const { contentRsc, filePath, headings, title, headerImage, library } =
+    Route.useLoaderData()
+  const { _splat: slug } = Route.useParams()
 
   const isTocVisible = headings.length > 1
 
@@ -113,13 +116,7 @@ function BlogPost() {
   const repo = 'tanstack/tanstack.com'
   const branch = 'main'
   const activePartners = React.useMemo(
-    () =>
-      partners.filter(
-        (d) =>
-          d.status === 'active' &&
-          d.name !== 'Nozzle.io' &&
-          d.id !== 'fireship',
-      ),
+    () => partners.filter((d) => d.status === 'active'),
     [],
   )
 
@@ -161,6 +158,13 @@ function BlogPost() {
                     ].join(' ')}
                   >
                     <div className="flex overflow-auto flex-col w-full p-2 lg:p-4 xl:p-6 pt-0">
+                      {!headerImage && slug ? (
+                        <CoverFallback
+                          slug={slug}
+                          library={library}
+                          className="aspect-[5/2] w-full rounded-2xl mb-6"
+                        />
+                      ) : null}
                       <MarkdownContent
                         title={title}
                         contentRsc={contentRsc}
@@ -185,7 +189,7 @@ function BlogPost() {
           </div>
           <RightRail breakpoint="md">
             <PartnersRail
-              analyticsPlacement="blog_right_rail"
+              analyticsPlacement="blog_rail"
               partners={activePartners}
             />
             <div className="hidden md:block border border-gray-500/20 rounded-l-lg overflow-hidden w-full">

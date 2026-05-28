@@ -2,6 +2,7 @@ import * as React from 'react'
 
 export type Framework =
   | 'angular'
+  | 'alpine'
   | 'lit'
   | 'preact'
   | 'qwik'
@@ -61,7 +62,6 @@ export type LibrarySlim = {
   scarfId?: string
   defaultDocs?: string
   docsRoot?: string
-  ogImage?: string
   hideCodesandboxUrl?: true
   hideStackblitzUrl?: true
   showVercelUrl?: boolean
@@ -72,6 +72,8 @@ export type LibrarySlim = {
   legacyPackages?: string[]
   installPath?: string
   corePackageName?: string
+  frameworkPackageNames?: Partial<Record<Framework, string>>
+  frameworkDocs?: Partial<Record<Framework, string>>
   handleRedirects?: (href: string) => void
   /**
    * If false, the library is hidden from sidebar navigation and pages have noindex meta tag.
@@ -81,7 +83,7 @@ export type LibrarySlim = {
   visible?: boolean
   sitemap?: {
     includeLandingPage?: boolean
-    includeTopLevelDocsPages?: boolean
+    includeDocsPages?: boolean
   }
 }
 

@@ -2,20 +2,27 @@
  * Lightweight smoke tests using fetch - no browser required
  * Verifies pages return 200 and contain expected content
  *
- * Prerequisites:
- * - Dev server running on :3000 (or will start one)
- * - Library repos cloned as siblings (query, router, table, etc.)
- *   Dev mode reads docs from local filesystem: ../../../../{repo}
+ * All tests hit the dev server on :3000. Library docs routes normally read
+ * from sibling repo clones on the filesystem (`../../../../{repo}` relative
+ * to documents.server.ts), which is unreliable from worktrees or fresh
+ * machines. To avoid that flakiness, smoke runs always set
+ * `TANSTACK_DOCS_USE_REMOTE=1` on the dev server so docs lookups fetch from
+ * raw.githubusercontent.com instead — the same fork point dev mode exposes
+ * via that env var.
  *
- * Skipped in CI because:
- * - No standalone production server (Netlify serverless deployment)
- * - Library repos not available as siblings
+ * If an existing dev server on :3000 doesn't have remote docs enabled, smoke
+ * will spawn its own dev server on a different port with the env var set.
+ *
+ * Skipped in CI because there is no standalone production server (Netlify
+ * serverless deployment).
  */
 
 import { spawn, type ChildProcess } from 'child_process'
 import { createServer } from 'net'
 
 const DEFAULT_URL = 'http://localhost:3000'
+
+const DOCS_PROBE_PATH = '/query/latest/docs/framework/react/overview'
 
 // Skip in CI - this app deploys to Netlify serverless, no standalone server
 if (process.env.CI === 'true') {
@@ -29,11 +36,32 @@ type TestCase = {
   expectedContent: string[]
 }
 
+type ImageTestCase = {
+  name: string
+  path: string
+  expectStatus?: number // defaults to 200 (image/png check)
+}
+
 const tests: TestCase[] = [
   {
     name: 'home page',
     path: '/',
     expectedContent: ['TanStack', '<html', '</html>'],
+  },
+  {
+    name: 'blog index',
+    path: '/blog',
+    expectedContent: ['<html', '</html>', 'Blog'],
+  },
+  {
+    name: 'blog post',
+    path: '/blog/npm-supply-chain-compromise-postmortem',
+    expectedContent: ['<html', '</html>', 'Postmortem'],
+  },
+  {
+    name: 'ethos page',
+    path: '/ethos',
+    expectedContent: ['<html', '</html>', 'Ethos'],
   },
   {
     name: 'query docs',
@@ -49,6 +77,19 @@ const tests: TestCase[] = [
     name: 'table docs',
     path: '/table/latest/docs/introduction',
     expectedContent: ['<html', '</html>', '<h1'],
+  },
+]
+
+const ogTests: ImageTestCase[] = [
+  { name: 'OG image · library landing', path: '/api/og/query.png' },
+  {
+    name: 'OG image · docs page',
+    path: '/api/og/ai.png?title=useQuery&description=Fetch%20data',
+  },
+  {
+    name: 'OG image · unknown library returns 404',
+    path: '/api/og/not-a-library.png',
+    expectStatus: 404,
   },
 ]
 
@@ -118,7 +159,18 @@ async function checkExistingServer(): Promise<boolean> {
     const res = await fetch(DEFAULT_URL)
     if (!res.ok) return false
     const html = await res.text()
-    return html.includes('TanStack')
+    if (!html.includes('TanStack')) return false
+  } catch {
+    return false
+  }
+
+  // The home page works, but smoke also exercises docs routes — which read
+  // from sibling repo clones unless TANSTACK_DOCS_USE_REMOTE is set on the
+  // dev server. Probe a docs route to see whether the existing server can
+  // serve them; if not, fall back to spawning our own.
+  try {
+    const res = await fetch(`${DEFAULT_URL}${DOCS_PROBE_PATH}`)
+    return res.ok
   } catch {
     return false
   }
@@ -135,12 +187,18 @@ async function main() {
     const port = await getAvailablePort()
     baseUrl = `http://localhost:${port}`
 
-    console.log(`Starting dev server on port ${port}...`)
+    console.log(
+      `Starting dev server on port ${port} (TANSTACK_DOCS_USE_REMOTE=1)...`,
+    )
     serverProcess = spawn('pnpm', ['dev'], {
       stdio: 'ignore',
       detached: true,
       shell: true,
-      env: { ...process.env, PORT: String(port) },
+      env: {
+        ...process.env,
+        PORT: String(port),
+        TANSTACK_DOCS_USE_REMOTE: '1',
+      },
     })
 
     const ready = await waitForServer(baseUrl)
@@ -154,27 +212,84 @@ async function main() {
 
   console.log(`Running smoke tests against ${baseUrl}\n`)
 
-  let passed = 0
-  let failed = 0
+  let htmlPassed = 0
+  let htmlFailed = 0
 
   for (const test of tests) {
     const result = await runTest(baseUrl, test)
     if (result.pass) {
       console.log(`  ✓ ${test.name}`)
-      passed++
+      htmlPassed++
     } else {
       console.log(`  ✗ ${test.name}: ${result.error}`)
-      failed++
+      htmlFailed++
     }
   }
 
-  console.log(`\n${passed} passed, ${failed} failed\n`)
+  console.log(`\nHTML: ${htmlPassed} passed, ${htmlFailed} failed\n`)
+
+  // Test OG image endpoints
+  console.log('Running OG image tests...\n')
+
+  let ogPassed = 0
+  let ogFailed = 0
+
+  for (const testCase of ogTests) {
+    const url = `${baseUrl}${testCase.path}`
+    const expectStatus = testCase.expectStatus ?? 200
+
+    try {
+      const response = await fetch(url)
+
+      if (response.status !== expectStatus) {
+        console.log(
+          `  ✗ ${testCase.name}: HTTP ${response.status} (expected ${expectStatus})`,
+        )
+        ogFailed++
+        continue
+      }
+
+      // For non-200 expectations, status alone is the assertion.
+      if (expectStatus !== 200) {
+        console.log(`  ✓ ${testCase.name} (HTTP ${response.status})`)
+        ogPassed++
+        continue
+      }
+
+      const contentType = response.headers.get('content-type')
+      if (contentType !== 'image/png') {
+        console.log(`  ✗ ${testCase.name}: content-type ${contentType}`)
+        ogFailed++
+        continue
+      }
+
+      const body = await response.arrayBuffer()
+      if (body.byteLength === 0) {
+        console.log(`  ✗ ${testCase.name}: empty body`)
+        ogFailed++
+        continue
+      }
+
+      console.log(`  ✓ ${testCase.name} (${body.byteLength} bytes)`)
+      ogPassed++
+    } catch (err) {
+      console.log(
+        `  ✗ ${testCase.name}: ${err instanceof Error ? err.message : String(err)}`,
+      )
+      ogFailed++
+    }
+  }
+
+  console.log(`\nOG: ${ogPassed} passed, ${ogFailed} failed`)
+  console.log(
+    `Total: ${htmlPassed + ogPassed} passed, ${htmlFailed + ogFailed} failed\n`,
+  )
 
   if (serverProcess) {
     process.kill(-serverProcess.pid!, 'SIGTERM')
   }
 
-  if (failed > 0) {
+  if (htmlFailed + ogFailed > 0) {
     process.exit(1)
   }
 }

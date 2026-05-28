@@ -13,6 +13,7 @@ import {
   getExampleStartingPath,
 } from '~/utils/sandbox'
 import { seo } from '~/utils/seo'
+import { ogImageUrl } from '~/utils/og'
 import { capitalize, slugToTitle } from '~/utils/utils'
 import * as v from 'valibot'
 import { CodeExplorer } from '~/components/CodeExplorer'
@@ -23,6 +24,8 @@ import {
   ExampleDeployDialog,
   type DeployProvider,
 } from '~/components/ExampleDeployDialog'
+import { getDocsCacheHeaders } from '~/utils/docs-cache-headers'
+import { stackBlitzEmbedHeaders } from '~/utils/stackblitz-embed'
 
 const renderedFileQueryOptions = (
   repo: string,
@@ -118,17 +121,29 @@ export const Route = createFileRoute(
   },
   head: ({ params }) => {
     const library = getLibrary(params.libraryId)
+    const exampleName = slugToTitle(params._splat || '')
+    const frameworkName = capitalize(params.framework)
+    const ogTitle = `${frameworkName} ${library.name} ${exampleName} Example`
+    const ogDescription = `An example showing how to implement ${exampleName} in ${frameworkName} using ${library.name}.`
 
     return {
       meta: seo({
-        title: `${capitalize(params.framework)} ${library.name} ${slugToTitle(
-          params._splat || '',
-        )} Example | ${library.name} Docs`,
-        description: `An example showing how to implement ${slugToTitle(
-          params._splat || '',
-        )} in ${capitalize(params.framework)} using ${library.name}.`,
+        title: `${ogTitle} | ${library.name} Docs`,
+        description: ogDescription,
+        image: ogImageUrl(library.id, {
+          title: ogTitle,
+          description: ogDescription,
+        }),
         noindex: library.visible === false,
       }),
+    }
+  },
+  headers: ({ params }) => {
+    const { libraryId, version } = params
+
+    return {
+      ...getDocsCacheHeaders({ libraryId, version }),
+      ...stackBlitzEmbedHeaders,
     }
   },
   staleTime: 1000 * 60 * 5, // 5 minutes

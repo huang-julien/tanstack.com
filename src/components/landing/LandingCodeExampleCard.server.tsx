@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { Card } from '~/components/Card'
 import { CodeBlock } from '~/components/markdown/CodeBlock.server'
 import { Tabs, type TabDefinition } from '~/components/markdown/Tabs'
 import type { Framework } from '~/libraries'
@@ -26,29 +25,33 @@ export function LandingCodeExampleCard({
   return (
     <div className="px-4 space-y-4 flex flex-col items-center">
       <div className="text-3xl font-black">{title}</div>
-      <Tabs tabs={tabs}>
-        {frameworks.map((framework) => {
-          const example = codeByFramework[framework]
+      <div className="max-w-full min-w-0">
+        <Tabs tabs={tabs}>
+          {frameworks.map((framework) => {
+            const example = codeByFramework[framework]
 
-          if (!example) {
+            if (!example) {
+              return (
+                <div key={framework}>
+                  {renderFallback ? renderFallback(framework) : null}
+                </div>
+              )
+            }
+
             return (
-              <div key={framework}>
-                {renderFallback ? renderFallback(framework) : null}
-              </div>
+              <CodeBlock
+                key={framework}
+                className="mt-0 border-0"
+                showTypeCopyButton={false}
+              >
+                <code className={`language-${example.lang}`}>
+                  {example.code}
+                </code>
+              </CodeBlock>
             )
-          }
-
-          return (
-            <CodeBlock
-              key={framework}
-              className="mt-0 border-0"
-              showTypeCopyButton={false}
-            >
-              <code className={`language-${example.lang}`}>{example.code}</code>
-            </CodeBlock>
-          )
-        })}
-      </Tabs>
+          })}
+        </Tabs>
+      </div>
     </div>
   )
 }

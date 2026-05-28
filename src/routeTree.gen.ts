@@ -15,6 +15,7 @@ import { Route as TenetsRouteImport } from './routes/tenets'
 import { Route as SupportRouteImport } from './routes/support'
 import { Route as SponsorsEmbedRouteImport } from './routes/sponsors-embed'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as ShopRouteImport } from './routes/shop'
 import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -41,18 +42,23 @@ import { Route as LibraryIdRouteRouteImport } from './routes/$libraryId/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as StatsIndexRouteImport } from './routes/stats/index'
 import { Route as ShowcaseIndexRouteImport } from './routes/showcase/index'
+import { Route as ShopIndexRouteImport } from './routes/shop.index'
 import { Route as PartnersIndexRouteImport } from './routes/partners.index'
 import { Route as BuilderIndexRouteImport } from './routes/builder.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AccountIndexRouteImport } from './routes/account/index'
 import { Route as LibraryIdIndexRouteImport } from './routes/$libraryId/index'
+import { Route as StackCategoryRouteImport } from './routes/stack.$category'
 import { Route as ShowcaseSubmitRouteImport } from './routes/showcase/submit'
 import { Route as ShowcaseIdRouteImport } from './routes/showcase/$id'
+import { Route as ShopSearchRouteImport } from './routes/shop.search'
+import { Route as ShopCartRouteImport } from './routes/shop.cart'
 import { Route as PartnersPartnerRouteImport } from './routes/partners.$partner'
 import { Route as OauthTokenRouteImport } from './routes/oauth/token'
 import { Route as OauthRegisterRouteImport } from './routes/oauth/register'
 import { Route as OauthAuthorizeRouteImport } from './routes/oauth/authorize'
+import { Route as LibrariesFrameworkRouteImport } from './routes/libraries_.$framework'
 import { Route as BuilderDocsRouteImport } from './routes/builder.docs'
 import { Route as BlogSplatRouteImport } from './routes/blog.$'
 import { Route as AuthSignoutRouteImport } from './routes/auth/signout'
@@ -98,8 +104,13 @@ import { Route as AdminFeedbackIndexRouteImport } from './routes/admin/feedback.
 import { Route as LibraryIdVersionIndexRouteImport } from './routes/$libraryId/$version.index'
 import { Route as StatsNpmPackagesRouteImport } from './routes/stats/npm/$packages'
 import { Route as ShowcaseEditIdRouteImport } from './routes/showcase/edit.$id'
+import { Route as ShopProductsHandleRouteImport } from './routes/shop.products.$handle'
+import { Route as ShopPoliciesHandleRouteImport } from './routes/shop.policies.$handle'
+import { Route as ShopPagesHandleRouteImport } from './routes/shop.pages.$handle'
+import { Route as ShopCollectionsHandleRouteImport } from './routes/shop.collections.$handle'
 import { Route as IntentRegistryPackageNameRouteImport } from './routes/intent/registry/$packageName'
 import { Route as AuthProviderStartRouteImport } from './routes/auth/$provider/start'
+import { Route as ApiOgLibraryDotpngRouteImport } from './routes/api/og/$library[.png]'
 import { Route as ApiMcpSplatRouteImport } from './routes/api/mcp/$'
 import { Route as ApiGithubWebhookRouteImport } from './routes/api/github/webhook'
 import { Route as ApiExampleDeployRouteImport } from './routes/api/example/deploy'
@@ -134,6 +145,7 @@ import { Route as LibraryIdVersionDocsChar123Char125DotmdRouteImport } from './r
 import { Route as LibraryIdVersionDocsNpmStatsRouteImport } from './routes/$libraryId/$version.docs.npm-stats'
 import { Route as LibraryIdVersionDocsContributorsRouteImport } from './routes/$libraryId/$version.docs.contributors'
 import { Route as LibraryIdVersionDocsCommunityResourcesRouteImport } from './routes/$libraryId/$version.docs.community-resources'
+import { Route as LibraryIdVersionDocsBlogRouteImport } from './routes/$libraryId/$version.docs.blog'
 import { Route as LibraryIdVersionDocsSplatRouteImport } from './routes/$libraryId/$version.docs.$'
 import { Route as LibraryIdVersionDocsFrameworkIndexRouteImport } from './routes/$libraryId/$version.docs.framework.index'
 import { Route as ApiAuthCliStatusTicketIdRouteImport } from './routes/api/auth/cli/status.$ticketId'
@@ -170,6 +182,11 @@ const SponsorsEmbedRoute = SponsorsEmbedRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopRoute = ShopRouteImport.update({
+  id: '/shop',
+  path: '/shop',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RssDotxmlRoute = RssDotxmlRouteImport.update({
@@ -302,6 +319,11 @@ const ShowcaseIndexRoute = ShowcaseIndexRouteImport.update({
   path: '/showcase/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ShopIndexRoute = ShopIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ShopRoute,
+} as any)
 const PartnersIndexRoute = PartnersIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -332,6 +354,11 @@ const LibraryIdIndexRoute = LibraryIdIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LibraryIdRouteRoute,
 } as any)
+const StackCategoryRoute = StackCategoryRouteImport.update({
+  id: '/stack/$category',
+  path: '/stack/$category',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ShowcaseSubmitRoute = ShowcaseSubmitRouteImport.update({
   id: '/showcase/submit',
   path: '/showcase/submit',
@@ -341,6 +368,16 @@ const ShowcaseIdRoute = ShowcaseIdRouteImport.update({
   id: '/showcase/$id',
   path: '/showcase/$id',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ShopSearchRoute = ShopSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => ShopRoute,
+} as any)
+const ShopCartRoute = ShopCartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => ShopRoute,
 } as any)
 const PartnersPartnerRoute = PartnersPartnerRouteImport.update({
   id: '/$partner',
@@ -360,6 +397,11 @@ const OauthRegisterRoute = OauthRegisterRouteImport.update({
 const OauthAuthorizeRoute = OauthAuthorizeRouteImport.update({
   id: '/oauth/authorize',
   path: '/oauth/authorize',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LibrariesFrameworkRoute = LibrariesFrameworkRouteImport.update({
+  id: '/libraries_/$framework',
+  path: '/libraries/$framework',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BuilderDocsRoute = BuilderDocsRouteImport.update({
@@ -588,6 +630,26 @@ const ShowcaseEditIdRoute = ShowcaseEditIdRouteImport.update({
   path: '/showcase/edit/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ShopProductsHandleRoute = ShopProductsHandleRouteImport.update({
+  id: '/products/$handle',
+  path: '/products/$handle',
+  getParentRoute: () => ShopRoute,
+} as any)
+const ShopPoliciesHandleRoute = ShopPoliciesHandleRouteImport.update({
+  id: '/policies/$handle',
+  path: '/policies/$handle',
+  getParentRoute: () => ShopRoute,
+} as any)
+const ShopPagesHandleRoute = ShopPagesHandleRouteImport.update({
+  id: '/pages/$handle',
+  path: '/pages/$handle',
+  getParentRoute: () => ShopRoute,
+} as any)
+const ShopCollectionsHandleRoute = ShopCollectionsHandleRouteImport.update({
+  id: '/collections/$handle',
+  path: '/collections/$handle',
+  getParentRoute: () => ShopRoute,
+} as any)
 const IntentRegistryPackageNameRoute =
   IntentRegistryPackageNameRouteImport.update({
     id: '/intent/registry/$packageName',
@@ -597,6 +659,11 @@ const IntentRegistryPackageNameRoute =
 const AuthProviderStartRoute = AuthProviderStartRouteImport.update({
   id: '/auth/$provider/start',
   path: '/auth/$provider/start',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiOgLibraryDotpngRoute = ApiOgLibraryDotpngRouteImport.update({
+  id: '/api/og/$library.png',
+  path: '/api/og/$library.png',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiMcpSplatRoute = ApiMcpSplatRouteImport.update({
@@ -783,6 +850,12 @@ const LibraryIdVersionDocsCommunityResourcesRoute =
     path: '/community-resources',
     getParentRoute: () => LibraryIdVersionDocsRoute,
   } as any)
+const LibraryIdVersionDocsBlogRoute =
+  LibraryIdVersionDocsBlogRouteImport.update({
+    id: '/blog',
+    path: '/blog',
+    getParentRoute: () => LibraryIdVersionDocsRoute,
+  } as any)
 const LibraryIdVersionDocsSplatRoute =
   LibraryIdVersionDocsSplatRouteImport.update({
     id: '/$',
@@ -851,6 +924,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/rss.xml': typeof RssDotxmlRoute
+  '/shop': typeof ShopRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sponsors-embed': typeof SponsorsEmbedRoute
   '/support': typeof SupportRoute
@@ -876,18 +950,23 @@ export interface FileRoutesByFullPath {
   '/auth/signout': typeof AuthSignoutRoute
   '/blog/$': typeof BlogSplatRoute
   '/builder/docs': typeof BuilderDocsRoute
+  '/libraries/$framework': typeof LibrariesFrameworkRoute
   '/oauth/authorize': typeof OauthAuthorizeRoute
   '/oauth/register': typeof OauthRegisterRoute
   '/oauth/token': typeof OauthTokenRoute
   '/partners/$partner': typeof PartnersPartnerRoute
+  '/shop/cart': typeof ShopCartRoute
+  '/shop/search': typeof ShopSearchRoute
   '/showcase/$id': typeof ShowcaseIdRoute
   '/showcase/submit': typeof ShowcaseSubmitRoute
+  '/stack/$category': typeof StackCategoryRoute
   '/$libraryId/': typeof LibraryIdIndexRoute
   '/account/': typeof AccountIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/builder/': typeof BuilderIndexRoute
   '/partners/': typeof PartnersIndexRoute
+  '/shop/': typeof ShopIndexRoute
   '/showcase/': typeof ShowcaseIndexRoute
   '/stats/': typeof StatsIndexRoute
   '/$libraryId/$version/docs': typeof LibraryIdVersionDocsRouteWithChildren
@@ -912,8 +991,13 @@ export interface FileRoutesByFullPath {
   '/api/example/deploy': typeof ApiExampleDeployRoute
   '/api/github/webhook': typeof ApiGithubWebhookRoute
   '/api/mcp/$': typeof ApiMcpSplatRoute
+  '/api/og/$library.png': typeof ApiOgLibraryDotpngRoute
   '/auth/$provider/start': typeof AuthProviderStartRoute
   '/intent/registry/$packageName': typeof IntentRegistryPackageNameRouteWithChildren
+  '/shop/collections/$handle': typeof ShopCollectionsHandleRoute
+  '/shop/pages/$handle': typeof ShopPagesHandleRoute
+  '/shop/policies/$handle': typeof ShopPoliciesHandleRoute
+  '/shop/products/$handle': typeof ShopProductsHandleRoute
   '/showcase/edit/$id': typeof ShowcaseEditIdRoute
   '/stats/npm/$packages': typeof StatsNpmPackagesRoute
   '/$libraryId/$version/': typeof LibraryIdVersionIndexRoute
@@ -941,6 +1025,7 @@ export interface FileRoutesByFullPath {
   '/table/$version/': typeof TableVersionIndexRoute
   '/virtual/$version/': typeof VirtualVersionIndexRoute
   '/$libraryId/$version/docs/$': typeof LibraryIdVersionDocsSplatRoute
+  '/$libraryId/$version/docs/blog': typeof LibraryIdVersionDocsBlogRoute
   '/$libraryId/$version/docs/community-resources': typeof LibraryIdVersionDocsCommunityResourcesRoute
   '/$libraryId/$version/docs/contributors': typeof LibraryIdVersionDocsContributorsRoute
   '/$libraryId/$version/docs/npm-stats': typeof LibraryIdVersionDocsNpmStatsRoute
@@ -1003,18 +1088,23 @@ export interface FileRoutesByTo {
   '/auth/signout': typeof AuthSignoutRoute
   '/blog/$': typeof BlogSplatRoute
   '/builder/docs': typeof BuilderDocsRoute
+  '/libraries/$framework': typeof LibrariesFrameworkRoute
   '/oauth/authorize': typeof OauthAuthorizeRoute
   '/oauth/register': typeof OauthRegisterRoute
   '/oauth/token': typeof OauthTokenRoute
   '/partners/$partner': typeof PartnersPartnerRoute
+  '/shop/cart': typeof ShopCartRoute
+  '/shop/search': typeof ShopSearchRoute
   '/showcase/$id': typeof ShowcaseIdRoute
   '/showcase/submit': typeof ShowcaseSubmitRoute
+  '/stack/$category': typeof StackCategoryRoute
   '/$libraryId': typeof LibraryIdIndexRoute
   '/account': typeof AccountIndexRoute
   '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
   '/builder': typeof BuilderIndexRoute
   '/partners': typeof PartnersIndexRoute
+  '/shop': typeof ShopIndexRoute
   '/showcase': typeof ShowcaseIndexRoute
   '/stats': typeof StatsIndexRoute
   '/admin/feedback/$id': typeof AdminFeedbackIdRoute
@@ -1038,7 +1128,12 @@ export interface FileRoutesByTo {
   '/api/example/deploy': typeof ApiExampleDeployRoute
   '/api/github/webhook': typeof ApiGithubWebhookRoute
   '/api/mcp/$': typeof ApiMcpSplatRoute
+  '/api/og/$library.png': typeof ApiOgLibraryDotpngRoute
   '/auth/$provider/start': typeof AuthProviderStartRoute
+  '/shop/collections/$handle': typeof ShopCollectionsHandleRoute
+  '/shop/pages/$handle': typeof ShopPagesHandleRoute
+  '/shop/policies/$handle': typeof ShopPoliciesHandleRoute
+  '/shop/products/$handle': typeof ShopProductsHandleRoute
   '/showcase/edit/$id': typeof ShowcaseEditIdRoute
   '/stats/npm/$packages': typeof StatsNpmPackagesRoute
   '/$libraryId/$version': typeof LibraryIdVersionIndexRoute
@@ -1066,6 +1161,7 @@ export interface FileRoutesByTo {
   '/table/$version': typeof TableVersionIndexRoute
   '/virtual/$version': typeof VirtualVersionIndexRoute
   '/$libraryId/$version/docs/$': typeof LibraryIdVersionDocsSplatRoute
+  '/$libraryId/$version/docs/blog': typeof LibraryIdVersionDocsBlogRoute
   '/$libraryId/$version/docs/community-resources': typeof LibraryIdVersionDocsCommunityResourcesRoute
   '/$libraryId/$version/docs/contributors': typeof LibraryIdVersionDocsContributorsRoute
   '/$libraryId/$version/docs/npm-stats': typeof LibraryIdVersionDocsNpmStatsRoute
@@ -1111,6 +1207,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/rss.xml': typeof RssDotxmlRoute
+  '/shop': typeof ShopRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sponsors-embed': typeof SponsorsEmbedRoute
   '/support': typeof SupportRoute
@@ -1136,18 +1233,23 @@ export interface FileRoutesById {
   '/auth/signout': typeof AuthSignoutRoute
   '/blog/$': typeof BlogSplatRoute
   '/builder/docs': typeof BuilderDocsRoute
+  '/libraries_/$framework': typeof LibrariesFrameworkRoute
   '/oauth/authorize': typeof OauthAuthorizeRoute
   '/oauth/register': typeof OauthRegisterRoute
   '/oauth/token': typeof OauthTokenRoute
   '/partners/$partner': typeof PartnersPartnerRoute
+  '/shop/cart': typeof ShopCartRoute
+  '/shop/search': typeof ShopSearchRoute
   '/showcase/$id': typeof ShowcaseIdRoute
   '/showcase/submit': typeof ShowcaseSubmitRoute
+  '/stack/$category': typeof StackCategoryRoute
   '/$libraryId/': typeof LibraryIdIndexRoute
   '/account/': typeof AccountIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/builder/': typeof BuilderIndexRoute
   '/partners/': typeof PartnersIndexRoute
+  '/shop/': typeof ShopIndexRoute
   '/showcase/': typeof ShowcaseIndexRoute
   '/stats/': typeof StatsIndexRoute
   '/$libraryId/$version/docs': typeof LibraryIdVersionDocsRouteWithChildren
@@ -1172,8 +1274,13 @@ export interface FileRoutesById {
   '/api/example/deploy': typeof ApiExampleDeployRoute
   '/api/github/webhook': typeof ApiGithubWebhookRoute
   '/api/mcp/$': typeof ApiMcpSplatRoute
+  '/api/og/$library.png': typeof ApiOgLibraryDotpngRoute
   '/auth/$provider/start': typeof AuthProviderStartRoute
   '/intent/registry/$packageName': typeof IntentRegistryPackageNameRouteWithChildren
+  '/shop/collections/$handle': typeof ShopCollectionsHandleRoute
+  '/shop/pages/$handle': typeof ShopPagesHandleRoute
+  '/shop/policies/$handle': typeof ShopPoliciesHandleRoute
+  '/shop/products/$handle': typeof ShopProductsHandleRoute
   '/showcase/edit/$id': typeof ShowcaseEditIdRoute
   '/stats/npm/$packages': typeof StatsNpmPackagesRoute
   '/$libraryId/$version/': typeof LibraryIdVersionIndexRoute
@@ -1201,6 +1308,7 @@ export interface FileRoutesById {
   '/table/$version/': typeof TableVersionIndexRoute
   '/virtual/$version/': typeof VirtualVersionIndexRoute
   '/$libraryId/$version/docs/$': typeof LibraryIdVersionDocsSplatRoute
+  '/$libraryId/$version/docs/blog': typeof LibraryIdVersionDocsBlogRoute
   '/$libraryId/$version/docs/community-resources': typeof LibraryIdVersionDocsCommunityResourcesRoute
   '/$libraryId/$version/docs/contributors': typeof LibraryIdVersionDocsContributorsRoute
   '/$libraryId/$version/docs/npm-stats': typeof LibraryIdVersionDocsNpmStatsRoute
@@ -1247,6 +1355,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/robots.txt'
     | '/rss.xml'
+    | '/shop'
     | '/sitemap.xml'
     | '/sponsors-embed'
     | '/support'
@@ -1272,18 +1381,23 @@ export interface FileRouteTypes {
     | '/auth/signout'
     | '/blog/$'
     | '/builder/docs'
+    | '/libraries/$framework'
     | '/oauth/authorize'
     | '/oauth/register'
     | '/oauth/token'
     | '/partners/$partner'
+    | '/shop/cart'
+    | '/shop/search'
     | '/showcase/$id'
     | '/showcase/submit'
+    | '/stack/$category'
     | '/$libraryId/'
     | '/account/'
     | '/admin/'
     | '/blog/'
     | '/builder/'
     | '/partners/'
+    | '/shop/'
     | '/showcase/'
     | '/stats/'
     | '/$libraryId/$version/docs'
@@ -1308,8 +1422,13 @@ export interface FileRouteTypes {
     | '/api/example/deploy'
     | '/api/github/webhook'
     | '/api/mcp/$'
+    | '/api/og/$library.png'
     | '/auth/$provider/start'
     | '/intent/registry/$packageName'
+    | '/shop/collections/$handle'
+    | '/shop/pages/$handle'
+    | '/shop/policies/$handle'
+    | '/shop/products/$handle'
     | '/showcase/edit/$id'
     | '/stats/npm/$packages'
     | '/$libraryId/$version/'
@@ -1337,6 +1456,7 @@ export interface FileRouteTypes {
     | '/table/$version/'
     | '/virtual/$version/'
     | '/$libraryId/$version/docs/$'
+    | '/$libraryId/$version/docs/blog'
     | '/$libraryId/$version/docs/community-resources'
     | '/$libraryId/$version/docs/contributors'
     | '/$libraryId/$version/docs/npm-stats'
@@ -1399,18 +1519,23 @@ export interface FileRouteTypes {
     | '/auth/signout'
     | '/blog/$'
     | '/builder/docs'
+    | '/libraries/$framework'
     | '/oauth/authorize'
     | '/oauth/register'
     | '/oauth/token'
     | '/partners/$partner'
+    | '/shop/cart'
+    | '/shop/search'
     | '/showcase/$id'
     | '/showcase/submit'
+    | '/stack/$category'
     | '/$libraryId'
     | '/account'
     | '/admin'
     | '/blog'
     | '/builder'
     | '/partners'
+    | '/shop'
     | '/showcase'
     | '/stats'
     | '/admin/feedback/$id'
@@ -1434,7 +1559,12 @@ export interface FileRouteTypes {
     | '/api/example/deploy'
     | '/api/github/webhook'
     | '/api/mcp/$'
+    | '/api/og/$library.png'
     | '/auth/$provider/start'
+    | '/shop/collections/$handle'
+    | '/shop/pages/$handle'
+    | '/shop/policies/$handle'
+    | '/shop/products/$handle'
     | '/showcase/edit/$id'
     | '/stats/npm/$packages'
     | '/$libraryId/$version'
@@ -1462,6 +1592,7 @@ export interface FileRouteTypes {
     | '/table/$version'
     | '/virtual/$version'
     | '/$libraryId/$version/docs/$'
+    | '/$libraryId/$version/docs/blog'
     | '/$libraryId/$version/docs/community-resources'
     | '/$libraryId/$version/docs/contributors'
     | '/$libraryId/$version/docs/npm-stats'
@@ -1506,6 +1637,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/robots.txt'
     | '/rss.xml'
+    | '/shop'
     | '/sitemap.xml'
     | '/sponsors-embed'
     | '/support'
@@ -1531,18 +1663,23 @@ export interface FileRouteTypes {
     | '/auth/signout'
     | '/blog/$'
     | '/builder/docs'
+    | '/libraries_/$framework'
     | '/oauth/authorize'
     | '/oauth/register'
     | '/oauth/token'
     | '/partners/$partner'
+    | '/shop/cart'
+    | '/shop/search'
     | '/showcase/$id'
     | '/showcase/submit'
+    | '/stack/$category'
     | '/$libraryId/'
     | '/account/'
     | '/admin/'
     | '/blog/'
     | '/builder/'
     | '/partners/'
+    | '/shop/'
     | '/showcase/'
     | '/stats/'
     | '/$libraryId/$version/docs'
@@ -1567,8 +1704,13 @@ export interface FileRouteTypes {
     | '/api/example/deploy'
     | '/api/github/webhook'
     | '/api/mcp/$'
+    | '/api/og/$library.png'
     | '/auth/$provider/start'
     | '/intent/registry/$packageName'
+    | '/shop/collections/$handle'
+    | '/shop/pages/$handle'
+    | '/shop/policies/$handle'
+    | '/shop/products/$handle'
     | '/showcase/edit/$id'
     | '/stats/npm/$packages'
     | '/$libraryId/$version/'
@@ -1596,6 +1738,7 @@ export interface FileRouteTypes {
     | '/table/$version/'
     | '/virtual/$version/'
     | '/$libraryId/$version/docs/$'
+    | '/$libraryId/$version/docs/blog'
     | '/$libraryId/$version/docs/community-resources'
     | '/$libraryId/$version/docs/contributors'
     | '/$libraryId/$version/docs/npm-stats'
@@ -1641,6 +1784,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   RssDotxmlRoute: typeof RssDotxmlRoute
+  ShopRoute: typeof ShopRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SponsorsEmbedRoute: typeof SponsorsEmbedRoute
   SupportRoute: typeof SupportRoute
@@ -1652,11 +1796,13 @@ export interface RootRouteChildren {
   AuthCliRoute: typeof AuthCliRoute
   AuthPopupSuccessRoute: typeof AuthPopupSuccessRoute
   AuthSignoutRoute: typeof AuthSignoutRoute
+  LibrariesFrameworkRoute: typeof LibrariesFrameworkRoute
   OauthAuthorizeRoute: typeof OauthAuthorizeRoute
   OauthRegisterRoute: typeof OauthRegisterRoute
   OauthTokenRoute: typeof OauthTokenRoute
   ShowcaseIdRoute: typeof ShowcaseIdRoute
   ShowcaseSubmitRoute: typeof ShowcaseSubmitRoute
+  StackCategoryRoute: typeof StackCategoryRoute
   ShowcaseIndexRoute: typeof ShowcaseIndexRoute
   StatsIndexRoute: typeof StatsIndexRoute
   ApiApplicationStarterResolveRoute: typeof ApiApplicationStarterResolveRoute
@@ -1676,6 +1822,7 @@ export interface RootRouteChildren {
   ApiExampleDeployRoute: typeof ApiExampleDeployRoute
   ApiGithubWebhookRoute: typeof ApiGithubWebhookRoute
   ApiMcpSplatRoute: typeof ApiMcpSplatRoute
+  ApiOgLibraryDotpngRoute: typeof ApiOgLibraryDotpngRoute
   AuthProviderStartRoute: typeof AuthProviderStartRoute
   IntentRegistryPackageNameRoute: typeof IntentRegistryPackageNameRouteWithChildren
   ShowcaseEditIdRoute: typeof ShowcaseEditIdRoute
@@ -1748,6 +1895,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop': {
+      id: '/shop'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof ShopRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rss.xml': {
@@ -1932,6 +2086,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShowcaseIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/shop/': {
+      id: '/shop/'
+      path: '/'
+      fullPath: '/shop/'
+      preLoaderRoute: typeof ShopIndexRouteImport
+      parentRoute: typeof ShopRoute
+    }
     '/partners/': {
       id: '/partners/'
       path: '/'
@@ -1974,6 +2135,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LibraryIdIndexRouteImport
       parentRoute: typeof LibraryIdRouteRoute
     }
+    '/stack/$category': {
+      id: '/stack/$category'
+      path: '/stack/$category'
+      fullPath: '/stack/$category'
+      preLoaderRoute: typeof StackCategoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/showcase/submit': {
       id: '/showcase/submit'
       path: '/showcase/submit'
@@ -1987,6 +2155,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/showcase/$id'
       preLoaderRoute: typeof ShowcaseIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/shop/search': {
+      id: '/shop/search'
+      path: '/search'
+      fullPath: '/shop/search'
+      preLoaderRoute: typeof ShopSearchRouteImport
+      parentRoute: typeof ShopRoute
+    }
+    '/shop/cart': {
+      id: '/shop/cart'
+      path: '/cart'
+      fullPath: '/shop/cart'
+      preLoaderRoute: typeof ShopCartRouteImport
+      parentRoute: typeof ShopRoute
     }
     '/partners/$partner': {
       id: '/partners/$partner'
@@ -2014,6 +2196,13 @@ declare module '@tanstack/react-router' {
       path: '/oauth/authorize'
       fullPath: '/oauth/authorize'
       preLoaderRoute: typeof OauthAuthorizeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/libraries_/$framework': {
+      id: '/libraries_/$framework'
+      path: '/libraries/$framework'
+      fullPath: '/libraries/$framework'
+      preLoaderRoute: typeof LibrariesFrameworkRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/builder/docs': {
@@ -2331,6 +2520,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShowcaseEditIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/shop/products/$handle': {
+      id: '/shop/products/$handle'
+      path: '/products/$handle'
+      fullPath: '/shop/products/$handle'
+      preLoaderRoute: typeof ShopProductsHandleRouteImport
+      parentRoute: typeof ShopRoute
+    }
+    '/shop/policies/$handle': {
+      id: '/shop/policies/$handle'
+      path: '/policies/$handle'
+      fullPath: '/shop/policies/$handle'
+      preLoaderRoute: typeof ShopPoliciesHandleRouteImport
+      parentRoute: typeof ShopRoute
+    }
+    '/shop/pages/$handle': {
+      id: '/shop/pages/$handle'
+      path: '/pages/$handle'
+      fullPath: '/shop/pages/$handle'
+      preLoaderRoute: typeof ShopPagesHandleRouteImport
+      parentRoute: typeof ShopRoute
+    }
+    '/shop/collections/$handle': {
+      id: '/shop/collections/$handle'
+      path: '/collections/$handle'
+      fullPath: '/shop/collections/$handle'
+      preLoaderRoute: typeof ShopCollectionsHandleRouteImport
+      parentRoute: typeof ShopRoute
+    }
     '/intent/registry/$packageName': {
       id: '/intent/registry/$packageName'
       path: '/intent/registry/$packageName'
@@ -2343,6 +2560,13 @@ declare module '@tanstack/react-router' {
       path: '/auth/$provider/start'
       fullPath: '/auth/$provider/start'
       preLoaderRoute: typeof AuthProviderStartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/og/$library.png': {
+      id: '/api/og/$library.png'
+      path: '/api/og/$library.png'
+      fullPath: '/api/og/$library.png'
+      preLoaderRoute: typeof ApiOgLibraryDotpngRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/mcp/$': {
@@ -2583,6 +2807,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LibraryIdVersionDocsCommunityResourcesRouteImport
       parentRoute: typeof LibraryIdVersionDocsRoute
     }
+    '/$libraryId/$version/docs/blog': {
+      id: '/$libraryId/$version/docs/blog'
+      path: '/blog'
+      fullPath: '/$libraryId/$version/docs/blog'
+      preLoaderRoute: typeof LibraryIdVersionDocsBlogRouteImport
+      parentRoute: typeof LibraryIdVersionDocsRoute
+    }
     '/$libraryId/$version/docs/$': {
       id: '/$libraryId/$version/docs/$'
       path: '/$'
@@ -2637,6 +2868,7 @@ declare module '@tanstack/react-router' {
 
 interface LibraryIdVersionDocsRouteChildren {
   LibraryIdVersionDocsSplatRoute: typeof LibraryIdVersionDocsSplatRoute
+  LibraryIdVersionDocsBlogRoute: typeof LibraryIdVersionDocsBlogRoute
   LibraryIdVersionDocsCommunityResourcesRoute: typeof LibraryIdVersionDocsCommunityResourcesRoute
   LibraryIdVersionDocsContributorsRoute: typeof LibraryIdVersionDocsContributorsRoute
   LibraryIdVersionDocsNpmStatsRoute: typeof LibraryIdVersionDocsNpmStatsRoute
@@ -2651,6 +2883,7 @@ interface LibraryIdVersionDocsRouteChildren {
 
 const LibraryIdVersionDocsRouteChildren: LibraryIdVersionDocsRouteChildren = {
   LibraryIdVersionDocsSplatRoute: LibraryIdVersionDocsSplatRoute,
+  LibraryIdVersionDocsBlogRoute: LibraryIdVersionDocsBlogRoute,
   LibraryIdVersionDocsCommunityResourcesRoute:
     LibraryIdVersionDocsCommunityResourcesRoute,
   LibraryIdVersionDocsContributorsRoute: LibraryIdVersionDocsContributorsRoute,
@@ -2810,6 +3043,28 @@ const PartnersRouteWithChildren = PartnersRoute._addFileChildren(
   PartnersRouteChildren,
 )
 
+interface ShopRouteChildren {
+  ShopCartRoute: typeof ShopCartRoute
+  ShopSearchRoute: typeof ShopSearchRoute
+  ShopIndexRoute: typeof ShopIndexRoute
+  ShopCollectionsHandleRoute: typeof ShopCollectionsHandleRoute
+  ShopPagesHandleRoute: typeof ShopPagesHandleRoute
+  ShopPoliciesHandleRoute: typeof ShopPoliciesHandleRoute
+  ShopProductsHandleRoute: typeof ShopProductsHandleRoute
+}
+
+const ShopRouteChildren: ShopRouteChildren = {
+  ShopCartRoute: ShopCartRoute,
+  ShopSearchRoute: ShopSearchRoute,
+  ShopIndexRoute: ShopIndexRoute,
+  ShopCollectionsHandleRoute: ShopCollectionsHandleRoute,
+  ShopPagesHandleRoute: ShopPagesHandleRoute,
+  ShopPoliciesHandleRoute: ShopPoliciesHandleRoute,
+  ShopProductsHandleRoute: ShopProductsHandleRoute,
+}
+
+const ShopRouteWithChildren = ShopRoute._addFileChildren(ShopRouteChildren)
+
 interface IntentRegistryPackageNameRouteChildren {
   IntentRegistryPackageNameSkillNameRoute: typeof IntentRegistryPackageNameSkillNameRoute
   IntentRegistryPackageNameChar123Char125DotmdRoute: typeof IntentRegistryPackageNameChar123Char125DotmdRoute
@@ -2855,6 +3110,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
   RssDotxmlRoute: RssDotxmlRoute,
+  ShopRoute: ShopRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SponsorsEmbedRoute: SponsorsEmbedRoute,
   SupportRoute: SupportRoute,
@@ -2867,11 +3123,13 @@ const rootRouteChildren: RootRouteChildren = {
   AuthCliRoute: AuthCliRoute,
   AuthPopupSuccessRoute: AuthPopupSuccessRoute,
   AuthSignoutRoute: AuthSignoutRoute,
+  LibrariesFrameworkRoute: LibrariesFrameworkRoute,
   OauthAuthorizeRoute: OauthAuthorizeRoute,
   OauthRegisterRoute: OauthRegisterRoute,
   OauthTokenRoute: OauthTokenRoute,
   ShowcaseIdRoute: ShowcaseIdRoute,
   ShowcaseSubmitRoute: ShowcaseSubmitRoute,
+  StackCategoryRoute: StackCategoryRoute,
   ShowcaseIndexRoute: ShowcaseIndexRoute,
   StatsIndexRoute: StatsIndexRoute,
   ApiApplicationStarterResolveRoute: ApiApplicationStarterResolveRoute,
@@ -2891,6 +3149,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiExampleDeployRoute: ApiExampleDeployRoute,
   ApiGithubWebhookRoute: ApiGithubWebhookRoute,
   ApiMcpSplatRoute: ApiMcpSplatRoute,
+  ApiOgLibraryDotpngRoute: ApiOgLibraryDotpngRoute,
   AuthProviderStartRoute: AuthProviderStartRoute,
   IntentRegistryPackageNameRoute: IntentRegistryPackageNameRouteWithChildren,
   ShowcaseEditIdRoute: ShowcaseEditIdRoute,

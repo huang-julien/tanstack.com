@@ -4,7 +4,9 @@ import { DocContainer } from '~/components/DocContainer'
 import { DocTitle } from '~/components/DocTitle'
 import { findLibrary, getBranch, getLibrary } from '~/libraries'
 import { seo } from '~/utils/seo'
+import { ogImageUrl } from '~/utils/og'
 import { loadDocs } from '~/utils/docs'
+import { getDocsCacheHeaders } from '~/utils/docs-cache-headers'
 
 export const Route = createFileRoute(
   '/$libraryId/$version/docs/community-resources',
@@ -37,9 +39,17 @@ export const Route = createFileRoute(
       meta: seo({
         title: `${library.name} Community Resources`,
         description: `A collection of community resources for ${library.name}.`,
+        image: ogImageUrl(library.id, {
+          title: `${library.name} · Community Resources`,
+        }),
         noindex: library.visible === false,
       }),
     }
+  },
+  headers: ({ params }) => {
+    const { libraryId, version } = params
+
+    return getDocsCacheHeaders({ libraryId, version })
   },
   component: RouteComponent,
 })

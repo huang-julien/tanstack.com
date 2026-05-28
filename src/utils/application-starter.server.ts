@@ -13,11 +13,15 @@ import {
   STARTER_INTENT_INSTALL_COMMAND,
   STARTER_INTENT_LIST_COMMAND,
   type ApplicationStarterAnalysis,
+  type ApplicationStarterRecipe,
   type ApplicationStarterRequest,
   type ApplicationStarterResult,
 } from '~/utils/application-starter'
 import type { LibraryId } from '~/libraries'
-import { starterAddonLibraryIds } from '~/components/application-builder/shared'
+import {
+  getStarterMigrationGuideUrl,
+  starterAddonLibraryIds,
+} from '~/components/application-builder/shared'
 import {
   getApplicationStarterGuidanceLines,
   getApplicationStarterPartnerSuggestions,
@@ -395,11 +399,16 @@ function buildPromptGenerationRequest({
     `- template: ${deterministicResult.recipe.template ?? 'none'}`,
     `- package manager: ${deterministicResult.recipe.packageManager}`,
     `- add-ons: ${deterministicResult.recipe.features.join(', ') || 'none'}`,
+    `- add-on options: ${formatFeatureOptionsForPrompt(deterministicResult.recipe.featureOptions)}`,
     `- deployment: ${deterministicResult.recipe.deployment ?? 'portable'}`,
     `- toolchain: ${deterministicResult.recipe.toolchain ?? 'default'}`,
   ].join('\n')
   const userBrief = getApplicationStarterUserBrief(request.input)
   const starterGuidanceLines = getApplicationStarterGuidanceLines(request.input)
+  const migrationGuideUrl = getStarterMigrationGuideUrl(request.input)
+  const migrationGuideInstruction = migrationGuideUrl
+    ? `The prompt must instruct the agent to fetch ${migrationGuideUrl} and use it as the primary reference for the migration, following its steps in order.`
+    : null
 
   return [
     'Write a short, natural final prompt for a stronger coding agent.',
@@ -417,6 +426,7 @@ function buildPromptGenerationRequest({
     'If the user says things like make it cool, keep it minimal, or do not include something, restate those instructions explicitly in the final prompt instead of compressing them away.',
     'Use the resolved starter plan as fixed input. Do not redesign the stack unless the original brief requires sequencing work after scaffolding.',
     'Keep the prompt concise and plain-English. Avoid internal process language like fixed input, resolved plan, objective, implementation notes, or deliverable.',
+    ...(migrationGuideInstruction ? [migrationGuideInstruction] : []),
     '',
     `Context: ${request.context}`,
     `User request: ${userBrief}`,
@@ -463,7 +473,22 @@ function buildAnalysisRequest({
     `- template: ${deterministicResult.recipe.template ?? 'none'}`,
     `- deployment: ${deterministicResult.recipe.deployment ?? 'portable'}`,
     `- starter features: ${deterministicResult.recipe.features.join(', ') || 'none'}`,
+    `- add-on options: ${formatFeatureOptionsForPrompt(deterministicResult.recipe.featureOptions)}`,
   ].join('\n')
+}
+
+function formatFeatureOptionsForPrompt(
+  featureOptions: ApplicationStarterRecipe['featureOptions'],
+): string {
+  const parts = Object.entries(featureOptions)
+    .filter(([, options]) => options && Object.keys(options).length > 0)
+    .map(([featureId, options]) => {
+      const optionParts = Object.entries(options)
+        .map(([key, value]) => `${key}=${String(value)}`)
+        .join(', ')
+      return `${featureId}(${optionParts})`
+    })
+  return parts.length > 0 ? parts.join('; ') : 'none'
 }
 
 function buildDeterministicApplicationStarterAnalysis({
